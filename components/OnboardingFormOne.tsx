@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TextInput, Button, ImageBackground } from 'react-native'
-
-const OnboardingFormOne = () => {
+interface OnboardingFormOne {
+  setStep: (id) => void;
+}
+const OnboardingFormOne = ({setStep}: OnboardingFormOne) => {
   let [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -56,6 +58,7 @@ const OnboardingFormOne = () => {
   }, [formData])
   const sendFormData = () => {
     console.log(formData);
+    setStep(3);
   }
   return (
     <ImageBackground source={require('../assets/hammer.jpeg')} style={[styles.container]}>

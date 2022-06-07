@@ -99,7 +99,7 @@ export default function Auth({navigation}) {
       <View>
        <Text style={{ color: '#FFFFFF' }}>{!showSignUp ? 'Not having account?' : 'Already having account?'}<Text style={{ color: '#2196F3', fontWeight: 'bold' }} onPress={signUpState}>{!showSignUp ? 'Sign Up' : 'Sign In'}</Text></Text>
       </View>
-      </View>) : (<View><Onboarding /><Button title="Back" onPress={() => setStep(1)} /></View>)}
+      </View>) : (<View><Onboarding /></View>)}
     </>
   )
 }
