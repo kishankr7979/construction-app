@@ -9,6 +9,7 @@ export default function Auth({navigation}) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false)
   const [showSignUp, setShowSignUp] = useState(false);
+  const [submitButtonState, setSubmitButtonState] = useState(false);
   async function signInWithEmail() {
     setLoading(true)
     try{
@@ -43,6 +44,8 @@ export default function Auth({navigation}) {
 
   const signUpState = () => {
     setShowSignUp(!showSignUp);
+    setEmail('');
+    setPassword('');
   }
   async function signUpWithEmail() {
     setLoading(true)
@@ -54,6 +57,15 @@ export default function Auth({navigation}) {
     if (error) console.log(error.message)
     setLoading(false)
   }
+  useEffect(() => {
+    if(email.length < 5 || password.length < 4){
+      setSubmitButtonState(true);
+    }
+    else{
+      setSubmitButtonState(false);
+    }
+    console.log(submitButtonState)
+  },[email, password])
   return (
     <View style={styles.container}>
       {step === 1 ? (<>
@@ -81,13 +93,13 @@ export default function Auth({navigation}) {
           style={styles.inputArea}
         />
         <View style={styles.buttonContainer}>
-          <Button title={showSignUp ? 'SIGN UP' : 'SIGN IN'} disabled={loading} onPress={onSubmit} />
+          <Button title={showSignUp ? 'SIGN UP' : 'SIGN IN'} disabled={submitButtonState} onPress={onSubmit} />
         </View>
       </View>
       <View>
        <Text style={{ color: '#FFFFFF' }}>{!showSignUp ? 'Not having account?' : 'Already having account?'}<Text style={{ color: '#2196F3', fontWeight: 'bold' }} onPress={signUpState}>{!showSignUp ? 'Sign Up' : 'Sign In'}</Text></Text>
       </View>
-      </>) : (<View style={{marginTop: 100,}}><Text style={{color: '#FFFFFF'}}>Form</Text></View>)}
+      </>) : (<View style={{marginTop: 100,}}><Text style={{color: '#FFFFFF'}}>Form</Text><Button title="Back" onPress={() => setStep(1)} /></View>)}
     </View>
   )
 }
