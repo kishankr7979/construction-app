@@ -1,12 +1,21 @@
-import { useState, useEffect } from "react";
+import { View, Text, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { supabase } from "../lib/supabase";
-import { StyleSheet, View, Alert } from "react-native";
-import { Button, Input } from "react-native-elements";
-import { ApiError, Session } from "@supabase/supabase-js";
-import {TextInput} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-export default function Account({navigation},{ session }: { session: Session }) {
-  const [loading, setLoading] = useState(false);
+import { ApiError, Session } from "@supabase/supabase-js";
+const Home = ({navigation},{ session }: { session: Session }) => {
+    const [userDetails, setUserDetails] = useState<any>();
+    const [parsedData, setParsedData] = useState();
+    const getDataFromAsyncStorage = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('authenticatedUser');
+            return jsonValue != null ? JSON.parse(jsonValue) : null;
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+    const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [website, setWebsite] = useState("");
   const [avatar_url, setAvatarUrl] = useState("");
@@ -77,56 +86,14 @@ export default function Account({navigation},{ session }: { session: Session }) 
       setLoading(false);
     }
   }
+    useEffect(() => {
+        (async () => {
+            setUserDetails(await getDataFromAsyncStorage());
+        })();
+    }, [])
+    return (
+        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}><Text>hi {userDetails?.id}</Text></View>
+    );
 
-  return (
-    <View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput placeholder='Email' value={session?.user?.email}/>
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          placeholder="Username"
-          value={username || ""}
-          onChangeText={(text) => setUsername(text)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          placeholder="Website"
-          value={website || ""}
-          onChangeText={(text) => setWebsite(text)}
-        />
-      </View>
-
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title={loading ? "Loading ..." : "Update"}
-          onPress={() => updateProfile({ username, website, avatar_url })}
-          disabled={loading}
-        />
-      </View>
-
-      <View style={styles.verticallySpaced}>
-        <Button title="Sign Out" onPress={async() => {
-          supabase.auth.signOut()
-          }} />
-      </View>
-      <Button title='Home' onPress={() => navigation.navigate('WelcomeScreen')} />
-    </View>
-  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  mt20: {
-    marginTop: 20,
-  },
-});
+export default Home;

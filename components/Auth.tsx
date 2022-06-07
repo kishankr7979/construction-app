@@ -1,31 +1,47 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, StyleSheet, View, TextInput, Button, Text } from 'react-native'
+import { Alert, StyleSheet, View, TextInput, Button, Text } from 'react-native';
 import { supabase } from '../lib/supabase'
-// import { Icon } from ''
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserIcon from 'react-native-vector-icons/FontAwesome';
-export default function Auth() {
+export default function Auth({navigation}) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [phone, setPhone] = useState('');
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false)
   const [showSignUp, setShowSignUp] = useState(false);
   async function signInWithEmail() {
     setLoading(true)
-    const { user, error } = await supabase.auth.signIn({
-      email: email,
-      password: password,
-    })
-
-    if (error) Alert.alert(error.message)
+    try{
+      const { user, error } = await supabase.auth.signIn({
+        email: email,
+        password: password,
+      })
+      const storeValue = JSON.stringify(user);
+      await AsyncStorage.setItem('authenticatedUser', storeValue);
+      if (error) {
+        Alert.alert(error.message) 
+        return
+      }
+      navigation.navigate('WelcomeScreen');
+    }
+    catch(e){
+      console.log(e);
+    }
+   
     setLoading(false)
   }
 
   const onSubmit = async() => {
-      showSignUp ? await signUpWithEmail() : await signInWithEmail();
+    if(showSignUp){
+      setStep(2);
+    }
+    else {
+      await signInWithEmail();
+    }
+      //showSignUp ? await signUpWithEmail() : await signInWithEmail();
   }
 
   const signUpState = () => {
-    console.log('clicked')
     setShowSignUp(!showSignUp);
   }
   async function signUpWithEmail() {
@@ -40,7 +56,8 @@ export default function Auth() {
   }
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
+      {step === 1 ? (<>
+        <View style={styles.titleContainer}>
         <Text style={styles.title}>CONSTRUCTECH</Text>
       </View>
       <View style={styles.loginContainer}>
@@ -70,6 +87,7 @@ export default function Auth() {
       <View>
        <Text style={{ color: '#FFFFFF' }}>{!showSignUp ? 'Not having account?' : 'Already having account?'}<Text style={{ color: '#2196F3', fontWeight: 'bold' }} onPress={signUpState}>{!showSignUp ? 'Sign Up' : 'Sign In'}</Text></Text>
       </View>
+      </>) : (<View style={{marginTop: 100,}}><Text style={{color: '#FFFFFF'}}>Form</Text></View>)}
     </View>
   )
 }
@@ -88,7 +106,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#FFFFFF',
-    fontSize: 50,
+    fontSize: 45,
   },
   loginContainer: {
     position: 'relative',
