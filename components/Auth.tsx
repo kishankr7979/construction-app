@@ -3,6 +3,7 @@ import { Alert, StyleSheet, View, TextInput, Button, Text } from 'react-native';
 import { supabase } from '../lib/supabase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserIcon from 'react-native-vector-icons/FontAwesome';
+import Onboarding from '../components/Onboarding';
 export default function Auth({navigation}) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -66,8 +67,8 @@ export default function Auth({navigation}) {
     }
   },[email, password])
   return (
-    <View style={styles.container}>
-      {step === 1 ? (<>
+    <>
+    {step === 1 ? (<View style={styles.container}>
         <View style={styles.titleContainer}>
         <Text style={styles.title}>CONSTRUCTECH</Text>
       </View>
@@ -98,8 +99,8 @@ export default function Auth({navigation}) {
       <View>
        <Text style={{ color: '#FFFFFF' }}>{!showSignUp ? 'Not having account?' : 'Already having account?'}<Text style={{ color: '#2196F3', fontWeight: 'bold' }} onPress={signUpState}>{!showSignUp ? 'Sign Up' : 'Sign In'}</Text></Text>
       </View>
-      </>) : (<View style={{marginTop: 100,}}><Text style={{color: '#FFFFFF'}}>Form</Text><Button title="Back" onPress={() => setStep(1)} /></View>)}
-    </View>
+      </View>) : (<View><Onboarding /><Button title="Back" onPress={() => setStep(1)} /></View>)}
+    </>
   )
 }
 const styles = StyleSheet.create({

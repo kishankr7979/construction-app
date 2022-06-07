@@ -9,7 +9,10 @@ type ProductType = {
     productName: string,
     status: boolean,
 }
-const OnboardingProducts = () => {
+interface OnboardingProductsProps {
+    setStep: (id) => void;
+}
+const OnboardingProducts = ({setStep}: OnboardingProductsProps) => {
     const [selectCategory, setSelectedCategory] = useState(1);
     const listOfProducts: ProductType[] = [
         {
@@ -33,6 +36,7 @@ const OnboardingProducts = () => {
     }
     const sendCategory = () => {
         console.log(selectCategory);
+        setStep(2);
     }
     return (
             <ImageBackground  source={require('../assets/new-construction.jpeg')} style={[styles.container]}>
