@@ -39,7 +39,7 @@ export default function Auth({navigation}) {
     else {
       await signInWithEmail();
     }
-      //showSignUp ? await signUpWithEmail() : await signInWithEmail();
+     // showSignUp ? await signUpWithEmail() : await signInWithEmail();
   }
 
   const signUpState = () => {
@@ -53,8 +53,8 @@ export default function Auth({navigation}) {
       email: email,
       password: password,
     })
-
-    if (error) console.log(error.message)
+    console.log(user);
+    if (error) Alert.alert(error.message)
     setLoading(false)
   }
   useEffect(() => {
@@ -64,7 +64,6 @@ export default function Auth({navigation}) {
     else{
       setSubmitButtonState(false);
     }
-    console.log(submitButtonState)
   },[email, password])
   return (
     <View style={styles.container}>
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '80%',
+    width: '90%',
     borderRadius: 20,
     height: 400,
     backgroundColor: '#FFFFFF',

@@ -9,6 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Home from '../components/Home';
+import OnboardingProducts from '../components/OnboardingProducts';
 import OnboardingFormOne from '../components/OnboardingFormOne'
 export default function AppNavigation() {
     const Stack = createNativeStackNavigator();
@@ -46,6 +47,7 @@ export default function AppNavigation() {
         // <Account key={session.user.id} session={session} />
         ) : (
             <Stack.Navigator initialRouteName='OnboardingScreen'>
+                <Stack.Screen name='OnboardingProducts' component={OnboardingProducts} options={{headerShown: false}} />
                 <Stack.Screen name='LoginScreen' component={Auth} options={{headerShown: false}} />
                 <Stack.Screen name='OnboardingScreen' component={OnboardingFormOne} options={{headerShown: false}} />
         </Stack.Navigator>
