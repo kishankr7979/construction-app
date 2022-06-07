@@ -44,7 +44,7 @@ export default function Auth() {
         <Text style={styles.title}>CONSTRUCTECH</Text>
       </View>
       <View style={styles.loginContainer}>
-        <View style={{ position: 'absolute', top: showSignUp ? 30 : 50, }}>
+        <View style={{ position: 'absolute', top: 50, }}>
           <UserIcon name='user-circle' size={50} />
         </View>
         <TextInput
