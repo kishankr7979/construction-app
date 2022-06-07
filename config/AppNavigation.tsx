@@ -25,12 +25,12 @@ export default function AppNavigation() {
 
         {session && session.user ? (
             <Stack.Navigator>
-                <Stack.Screen name='HomeScreen' component={Account} options={{headerShown: true}} />
+                <Stack.Screen name='HomeScreen' component={Account} options={{headerShown: false}} />
             </Stack.Navigator>
         // <Account key={session.user.id} session={session} />
         ) : (
             <Stack.Navigator>
-                <Stack.Screen name='LoginScreen' component={Auth} options={{headerShown: true}} />
+                <Stack.Screen name='LoginScreen' component={Auth} options={{headerShown: false}} />
         </Stack.Navigator>
         )}
       </NavigationContainer>
