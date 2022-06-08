@@ -74,18 +74,19 @@ useEffect(() => {
     }
   }, [formData])
   const sendFormData = async () => {
-    console.log(formData);
-    const { data, error } = await supabase
-    .from('user-db')
-    .insert([
+    // const { data, error } = await supabase
+    // .from('user-db')
+    // .insert([
 
-      { created_at: new Date(), name: formData.name, phone: formData.phone, address: formData.address, occupation: formData.occupation, uuid:  userDetails.id},
-    ])
-    console.log(data);
-    if(error){
-     console.log(error);
-    }
-    // setStep(3);
+    //   { created_at: new Date(), name: formData.name, phone: formData.phone, address: formData.address, occupation: formData.occupation, uuid:  userDetails.id},
+    // ])
+    // console.log(data);
+    // if(error){
+    //  console.log(error);
+    // }
+    const data = JSON.stringify(formData);
+    await AsyncStorage.setItem('userData', data);
+    setStep(3);
   }
   return (
     <ImageBackground source={require('../assets/hammer.jpeg')} style={[styles.container]}>

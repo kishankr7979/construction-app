@@ -16,8 +16,7 @@ export default function Account({navigation},{ session }: { session: Session }) 
     if (session){ 
       getProfile()
     };
-  }, [session]);
-
+  }, []);
   async function getProfile() {
     try {
       setLoading(true);
@@ -59,50 +58,20 @@ const fetchApiData = async(userId) => {
 useEffect(() => {
   setUserSession(supabase.auth.session())
 }, []);
-useLayoutEffect(() => {
+useEffect(() => {
   (async() => {
     await fetchApiData(userSession?.user?.id);
   })()
 },[userSession?.user?.id !== undefined])
-// console.log(apiData);
-// useEffect(() => {
-//   fetchApiData()
-// }, [])
-  async function updateProfile({
-    username,
-    website,
-    avatar_url,
-  }: {
-    username: string;
-    website: string;
-    avatar_url: string;
-  }) {
-    try {
-      setLoading(true);
-      const user = supabase.auth.user();
-      if (!user) throw new Error("No user on the session!");
-
-      const updates = {
-        id: user.id,
-        username,
-        website,
-        avatar_url,
-        updated_at: new Date(),
-      };
-
-      let { error } = await supabase
-        .from("profiles")
-        .upsert(updates, { returning: "minimal" });
-
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      Alert.alert((error as ApiError).message);
-    } finally {
-      setLoading(false);
-    }
+useEffect(() => {
+  if(apiData?.length === 0){
+    console.log('new user');
+    navigation.navigate('Onboarding')
   }
+  else{
+    console.log('existing user');
+  }
+})
 console.log(apiData);
   return (
     <View>
@@ -123,15 +92,6 @@ console.log(apiData);
           onChangeText={(text) => setWebsite(text)}
         />
       </View>
-
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title={loading ? "Loading ..." : "Update"}
-          onPress={() => updateProfile({ username, website, avatar_url })}
-          disabled={loading}
-        />
-      </View>
-
       <View style={styles.verticallySpaced}>
         <Button title="Sign Out" onPress={async() => {
           supabase.auth.signOut()

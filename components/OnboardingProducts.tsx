@@ -39,7 +39,7 @@ const OnboardingProducts = ({setStep}: OnboardingProductsProps) => {
         setStep(2);
     }
     return (
-            <ImageBackground  source={require('../assets/new-construction.jpeg')} style={[styles.container]}>
+            <ImageBackground  source={require('../assets/new-construction.png')} style={[styles.container]}>
             <View style={styles.productMainConatiner}>
                 {listOfProducts.map((item) => {
                     return (

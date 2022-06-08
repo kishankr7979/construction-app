@@ -4,16 +4,18 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import OnboardingFormOne from '../components/OnboardingFormOne';
 import OnboardingProducts from '../components/OnboardingProducts';
 import Package from '../components/Package';
-const Onboarding = () => {
+interface OnboardingProps {
+    email: any;
+    password: any;
+    navigation: any;
+}
+const Onboarding = ({email, password, navigation}: OnboardingProps) => {
     const [stepper, setStepper] = useState(1);
-    // const goToNextStep = () => {
-    //     setStepper(1);
-    // }
     return (
         <View>
             {stepper === 1 ?
                 <OnboardingProducts setStep={setStepper}/>
-                : stepper === 2 ? <OnboardingFormOne setStep={setStepper}/> : <Package />}
+                : stepper === 2 ? <OnboardingFormOne setStep={setStepper}/> : <Package email={email} password={password} navigation={navigation} />}
         </View>
     )
 }
