@@ -39,7 +39,7 @@ export default function AppNavigation() {
         setSession(session)
       })
     }, [])
-  
+    console.log(session);
     return (
       <NavigationContainer>
         {session && session.user ? (

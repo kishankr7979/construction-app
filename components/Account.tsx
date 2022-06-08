@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { StyleSheet, View, Alert } from "react-native";
 import { Button, Input } from "react-native-elements";
@@ -10,9 +10,12 @@ export default function Account({navigation},{ session }: { session: Session }) 
   const [username, setUsername] = useState("");
   const [website, setWebsite] = useState("");
   const [avatar_url, setAvatarUrl] = useState("");
-
+  const [apiData, setApiData] = useState<any>();
+  const [userSession, setUserSession] = useState<any>(null)
   useEffect(() => {
-    if (session) getProfile();
+    if (session){ 
+      getProfile()
+    };
   }, [session]);
 
   async function getProfile() {
@@ -41,7 +44,30 @@ export default function Account({navigation},{ session }: { session: Session }) 
       setLoading(false);
     }
   }
-
+const fetchApiData = async(userId) => {
+  const { data, error } = await supabase
+  .from('user-db')
+  .select()
+  .match({uuid: userId})
+  if(data){
+    setApiData(data);
+  }
+  if(error){
+    console.log(error);
+  }
+}
+useEffect(() => {
+  setUserSession(supabase.auth.session())
+}, []);
+useLayoutEffect(() => {
+  (async() => {
+    await fetchApiData(userSession?.user?.id);
+  })()
+},[userSession?.user?.id !== undefined])
+// console.log(apiData);
+// useEffect(() => {
+//   fetchApiData()
+// }, [])
   async function updateProfile({
     username,
     website,
@@ -77,7 +103,7 @@ export default function Account({navigation},{ session }: { session: Session }) 
       setLoading(false);
     }
   }
-
+console.log(apiData);
   return (
     <View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
