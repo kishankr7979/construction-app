@@ -103,6 +103,7 @@ const OnboardingFormTwo = () => {
                     <CheckBox title='Flooring' checked={flooring} onPress={() => setFlooring(!flooring)} />
                     <CheckBox title='Furnishing' checked={furnishing} onPress={() => setFurnishing(!furnishing)} />
                     <CheckBox title='Plumber' checked={plumber} onPress={() => setPlumber(!plumber)} />
+                    
                 </View>}
             </View>
             </ImageBackground>

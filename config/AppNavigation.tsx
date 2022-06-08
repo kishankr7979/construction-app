@@ -45,13 +45,13 @@ export default function AppNavigation() {
         {session && session.user ? (
             <Stack.Navigator initialRouteName='AccountScreen'>
               <Stack.Screen name='AccountScreen' component={Account} options={{headerShown: false}} />
+              <Stack.Screen name='OnboardingFormOne' component={OnboardingFormOne} options={{headerShown: false}} />
             </Stack.Navigator>
         // <Account key={session.user.id} session={session} />
         ) : (
-            <Stack.Navigator initialRouteName='Onboarding'>
+            <Stack.Navigator initialRouteName='LoginScreen'>
                 {/* <Stack.Screen name='OnboardingProducts' component={OnboardingProducts} options={{headerShown: false}} /> */}
                 <Stack.Screen name='LoginScreen' component={Auth} options={{headerShown: false}} />
-                <Stack.Screen name='Onboarding' component={Onboarding} options={{headerShown: false}} />
                 {/* <Stack.Screen name='Package' component={OnboardingFormTwo} options={{headerShown: false}} /> */}
 
         </Stack.Navigator>

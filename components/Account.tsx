@@ -111,7 +111,7 @@ export default function Account({navigation},{ session }: { session: Session }) 
           supabase.auth.signOut()
           }} />
       </View>
-      <Button title='Home' onPress={() => navigation.navigate('WelcomeScreen')} />
+      <Button title='OnboardingForm' onPress={() => navigation.navigate('OnboardingFormOne')} />
     </View>
   );
 }
