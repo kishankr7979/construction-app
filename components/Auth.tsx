@@ -14,7 +14,6 @@ export default function Auth({navigation}) {
     password: '',
   })
   async function signInWithEmail() {
-    setLoading(true)
     try{
       const { user, error } = await supabase.auth.signIn({
         email: authData.email,
@@ -30,8 +29,6 @@ export default function Auth({navigation}) {
     catch(e){
       console.log(e);
     }
-   
-    setLoading(false)
   }
   async function signUpWithEmail() {
     setLoading(true)
@@ -42,7 +39,7 @@ export default function Auth({navigation}) {
     const storeValue = JSON.stringify(user);
     await AsyncStorage.setItem('authenticatedUser', storeValue);
     if (error) Alert.alert(error.message)
-    if(user) Alert.alert('Please confirm your email and then sign In');
+    // if(user) Alert.alert('Please confirm your email and then sign In');
     setLoading(false)
   }
   const onSubmit = async() => {

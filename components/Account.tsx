@@ -59,10 +59,13 @@ useEffect(() => {
   setUserSession(supabase.auth.session())
 }, []);
 useEffect(() => {
+  if(userSession?.user?.id !== undefined){
   (async() => {
     await fetchApiData(userSession?.user?.id);
+    AsyncStorage.setItem('userId', userSession?.user?.id)
   })()
-},[userSession?.user?.id !== undefined])
+}
+},[userSession?.user?.id])
 useEffect(() => {
   if(apiData?.length === 0){
     console.log('new user');
@@ -75,9 +78,6 @@ useEffect(() => {
 console.log(apiData);
   return (
       <View style={styles.container}>
-        <Button title="Sign Out" onPress={async() => {
-          supabase.auth.signOut()
-          }} />
       </View>
   );
 }

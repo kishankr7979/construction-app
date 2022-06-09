@@ -96,7 +96,7 @@ const OnboardingFormTwo = ({email, password, navigation}: Properties) => {
     }, [sessionData?.user?.id !== undefined]);
     const sendAllData = async() => {
         Promise.all([sendUserDetails(), sendServicesData()])
-        navigation.navigate('AccountScreen');
+        navigation.navigate('MainNavigationScreen');
     }
     console.log(sessionData?.user?.id);
     const listOfProducts: ProductType[] = [
