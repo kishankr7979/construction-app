@@ -74,45 +74,21 @@ useEffect(() => {
 })
 console.log(apiData);
   return (
-    <View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput placeholder='Email' value={session?.user?.email}/>
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          placeholder="Username"
-          value={username || ""}
-          onChangeText={(text) => setUsername(text)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          placeholder="Website"
-          value={website || ""}
-          onChangeText={(text) => setWebsite(text)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
+      <View style={styles.container}>
         <Button title="Sign Out" onPress={async() => {
           supabase.auth.signOut()
           }} />
       </View>
-      <Button title='OnboardingForm' onPress={() => navigation.navigate('OnboardingFormOne')} />
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  mt20: {
-    marginTop: 20,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%',
+  width: '100%',
+  backgroundColor: '#000000',
   },
 });
