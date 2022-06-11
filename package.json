@@ -29,6 +29,7 @@
     "react-native": "0.68.2",
     "react-native-dialog": "^9.2.2",
     "react-native-elements": "^3.4.2",
+    "react-native-popover-view": "^5.0.1",
     "react-native-prompt": "^1.0.0",
     "react-native-safe-area-context": "^4.3.1",
     "react-native-screens": "^3.13.1",

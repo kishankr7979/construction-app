@@ -6335,6 +6335,11 @@ react-native-gradle-plugin@^0.0.6:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz#b61a9234ad2f61430937911003cddd7e15c72b45"
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
 
+react-native-popover-view@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-popover-view/-/react-native-popover-view-5.0.1.tgz#dc85548f6e9468dda8fc3b8ae42c1094893c2679"
+  integrity sha512-8Hk8+azF5gYY0kpQthJ1n+0S1CQt4C67ODPRFdqLboAGUtja8Yv9svQBCSQZz2hrb4u2yjMrXq1SWbEBcSuIFQ==
+
 react-native-prompt@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-prompt/-/react-native-prompt-1.0.0.tgz#41e0ec2aa7dd8f12f3a3ee83af9d63c4b670f8a1"
