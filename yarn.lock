@@ -6311,6 +6311,11 @@ react-native-codegen@^0.0.17:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-dialog@^9.2.2:
+  version "9.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-dialog/-/react-native-dialog-9.2.2.tgz#f16921dd071d17daf1e5d98fb084e1837694f009"
+  integrity sha512-d2w3fyqB6G8Os0DYJKnfVl6PgqQwplW8dHSvzkQpczXzmX5V4BXOJTTXqoiKwI+nsS6QEHYb6Bk8VG7vV9WuXQ==
+
 react-native-elements@^3.4.2:
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-3.4.2.tgz#66602be9c5e0e0a2a831913adec80ff6518d1ee2"
@@ -6329,6 +6334,11 @@ react-native-gradle-plugin@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz#b61a9234ad2f61430937911003cddd7e15c72b45"
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
+
+react-native-prompt@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-prompt/-/react-native-prompt-1.0.0.tgz#41e0ec2aa7dd8f12f3a3ee83af9d63c4b670f8a1"
+  integrity sha512-LzZe8Jo3XRnnfPazUwLIhGhXefYoFrYaCTdWJoB/Skj0UpKByw5UfQ/o+qag9vJvAGwfFej1jAJff1Y6c2BP3w==
 
 react-native-ratings@8.0.4:
   version "8.0.4"

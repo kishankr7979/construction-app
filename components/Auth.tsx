@@ -4,11 +4,17 @@ import { supabase } from '../lib/supabase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserIcon from 'react-native-vector-icons/FontAwesome';
 import Onboarding from '../components/Onboarding';
+import Dialog from 'react-native-dialog';
+//import Prompt from 'react-native-prompt';
 export default function Auth({navigation}) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false)
   const [showSignUp, setShowSignUp] = useState(false);
   const [submitButtonState, setSubmitButtonState] = useState(false);
+  const [promptVisibility, setPromptVisibility] = useState({
+    isVisible: false,
+    message: '',
+  });
   const [authData, setAuthData] = useState({
     email: '',
     password: '',
@@ -39,7 +45,7 @@ export default function Auth({navigation}) {
     const storeValue = JSON.stringify(user);
     await AsyncStorage.setItem('authenticatedUser', storeValue);
     if (error) Alert.alert(error.message)
-    // if(user) Alert.alert('Please confirm your email and then sign In');
+    if(user) Alert.alert('Please confirm your email and then sign In');
     setLoading(false)
   }
   const onSubmit = async() => {
@@ -68,6 +74,27 @@ export default function Auth({navigation}) {
       setSubmitButtonState(false);
     }
   },[authData.email, authData.password])
+  const forgotPassword = () => {
+    console.log('triggered');
+    setPromptVisibility({...promptVisibility, isVisible: true, message: ''});
+  //  Alert.prompt('title', 'subtitle', text => console.log(text));
+  }
+  const closePrompt = async() => {
+    if(promptVisibility.message === ''){
+      return;
+    }
+    console.log(typeof promptVisibility.message)
+    setPromptVisibility({...promptVisibility, isVisible: false});
+    const { data, error } = await supabase.auth.api
+    .resetPasswordForEmail(promptVisibility.message);
+    console.log(data);
+    if(error){
+      console.log(error);
+    }
+  }
+  const submitPrompt = (value) => {
+    setPromptVisibility({...promptVisibility, isVisible: false, message: value});
+  }
   return (
     <>
     <View style={styles.container}>
@@ -100,6 +127,16 @@ export default function Auth({navigation}) {
       </View>
       <View>
        <Text style={{ color: '#FFFFFF' }}>{!showSignUp ? 'Not having account?' : 'Already having account?'}<Text style={{ color: '#2196F3', fontWeight: 'bold' }} onPress={signUpState}>{!showSignUp ? 'Sign Up' : 'Sign In'}</Text></Text>
+      </View>
+      <View>
+        {!showSignUp && <><Text onPress={forgotPassword} style={{ color: '#2196F3', fontWeight: 'bold' }}>Forgot Password</Text>
+        <Dialog.Container visible={promptVisibility.isVisible}>
+          <Dialog.Title>Forgot password</Dialog.Title>
+          <Dialog.Input value={promptVisibility.message} onChangeText={(text) => setPromptVisibility({...promptVisibility, message: text})}></Dialog.Input>
+          <Dialog.Button label={<Text>send</Text>} onPress={closePrompt}></Dialog.Button>
+        </Dialog.Container>
+  
+        </>}
       </View>
       </View>
     </>

@@ -38,7 +38,7 @@ const Profile = ({navigation}) => {
     }
     const openWebview = () => {
         console.log('triggered');
-        navigation.navigate('Webview', {url: `https://constructech-webview.netlify.app/update-form?id=${userSession?.id}`, sendData: () => {return 'hello'}});
+        navigation.navigate('Webview', {url: `https://constructech-webview.netlify.app/update-form?id=${userSession?.id}`, afterWebviewClose: 'Profile'});
     }
     useEffect(() => {
         Promise.all([fetchUserSession(), getUserDetails(), getServicesDetails()])
