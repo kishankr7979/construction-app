@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         width: '100%',
         backgroundColor: 'grey',
-        height: 400,
+        height: 200,
         borderBottomRightRadius:25,
         borderBottomLeftRadius:25,
         borderColor: '#2196F3',

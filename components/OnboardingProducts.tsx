@@ -10,7 +10,7 @@ type ProductType = {
     status: boolean,
 }
 interface OnboardingProductsProps {
-    setStep: (id) => void;
+    setStep: () => void;
 }
 const OnboardingProducts = ({setStep}: OnboardingProductsProps) => {
     const [selectCategory, setSelectedCategory] = useState(1);
@@ -35,8 +35,7 @@ const OnboardingProducts = ({setStep}: OnboardingProductsProps) => {
         setSelectedCategory(id);
     }
     const sendCategory = () => {
-        console.log(selectCategory);
-        setStep(2);
+        setStep();
     }
     return (
             <ImageBackground  source={require('../assets/new-construction.png')} style={[styles.container]}>

@@ -63,7 +63,7 @@ const Profile = ({ navigation }) => {
     }, [navigation]);
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            {loading ? <Loader position='absolute' size={70}/> : (
+            {/* {loading ? <Loader position='absolute' size={70}/> : (
             <>
             <View style={styles.avatarContainer}>
                 <UserIcon name='user' size={30} color='#2196F3' />
@@ -139,7 +139,7 @@ const Profile = ({ navigation }) => {
                 </>
             </View>
             </>
-            )}
+            )} */}
         </ScrollView>
     )
 }

@@ -16,6 +16,7 @@ import Loader from '../common/Loader';
 import Onboarding from '../components/Onboarding';
 import Profile from '../components/Profile';
 import Webview from '../components/Webview';
+import OrderIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 export default function AppNavigation() {
   const Stack = createNativeStackNavigator();
   const Tabs = createBottomTabNavigator();
@@ -30,7 +31,7 @@ export default function AppNavigation() {
     })
     setLoading(false);
   }, [])
-  const logoutAlert = () =>
+  const logoutAlert = (navigation) =>
     Alert.alert(
       "Logout",
       "are you sure?",
@@ -40,17 +41,18 @@ export default function AppNavigation() {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "Logout", onPress: () => logout() }
+        { text: "Logout", onPress: () => logout(navigation) }
       ]
     );
-  const logout = () => {
-    supabase.auth.signOut()
+  const logout = (navigation) => {
+    // navigation.navigate('Profile');
+    // supabase.auth.signOut()
   }
   const BottomTabs = () => {
     return (
       <Tabs.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
-        <Tabs.Screen name='Home' component={Account} options={{ tabBarIcon: ({ color }) => (<HomeIcon name='home' color='#2196F3' size={30} />), }} />
-        <Tabs.Screen name='Profile' component={Profile} options={{ tabBarIcon: ({ color }) => (<HomeIcon name='user' color='#2196F3' size={30} />), }} />
+        <Tabs.Screen name='Home' component={Account}   options={{ tabBarShowLabel: false, tabBarIcon: ({ focused }) => (<HomeIcon name='home' color={focused ? '#651fff' : '#242526'} size={30} />), }} />
+        <Tabs.Screen name='Profile' component={Profile} options={{ tabBarShowLabel: false,tabBarIcon: ({ focused }) => (<OrderIcon name='card-account-details-outline' color={focused ? '#651fff' : '#242526'} size={30} />), }} />
       </Tabs.Navigator>
     );
   }
@@ -60,11 +62,14 @@ export default function AppNavigation() {
         <>
           {console.log('session exist')}
           <Stack.Navigator initialRouteName='MainNavigationScreen'>
-            <Stack.Screen name='MainNavigationScreen' component={BottomTabs} options={{
-              headerShown: true, headerTitleAlign: 'center' ,headerTitle: 'ContrucTech', headerRight: () => (
-                <OffIcon name='power-off' color='#FF0000' size={30} onPress={logoutAlert}/>
-                ), headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF', }
-            }} />
+            <Stack.Screen name='MainNavigationScreen' component={BottomTabs} 
+             options={({ navigation }) => ({
+              headerShown: true, headerTitleAlign: 'center' ,headerTitle: 'ContrucTech',
+              headerTintColor: '#651fff',
+              headerRight: () => (
+                <OffIcon name='user-circle' color='#651fff' size={30} onPress={() => navigation.navigate('Profile')}/>
+              ),
+            })} />
             <Stack.Screen name='Onboarding' component={Onboarding} options={{ headerShown: false }} />
             <Stack.Screen name='Webview' options={{ headerShown: true, headerTitle: 'Edit Profile', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <Webview {...props} />}</Stack.Screen>
             <Stack.Screen name='PackageDetails' options={{ headerShown: true, headerTitle: 'Package', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <ServiceDetails {...props} />}</Stack.Screen>
