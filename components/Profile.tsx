@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabase";
 import Loader from '../common/Loader';
 import CheckIcon from 'react-native-vector-icons/Entypo'
 import UserIcon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WebView } from 'react-native-webview';
 const Profile = ({ navigation }) => {
     const [userSession, setUserSession] = useState<any>();
@@ -13,6 +14,15 @@ const Profile = ({ navigation }) => {
     const fetchUserSession = async () => {
         const user = supabase.auth.user();
         setUserSession(user);
+    }
+    const getDataFromAsyncStorage = async(key) => {
+        try{
+            const jsonValue = await AsyncStorage.getItem(key);
+            return jsonValue != null ? JSON.parse(jsonValue) : null;
+        }
+        catch(e){
+            console.log(e);
+        }
     }
     const getUserDetails = async () => {
         setLoading(true);
@@ -51,7 +61,6 @@ const Profile = ({ navigation }) => {
         });
         return unsubscribe;
     }, [navigation]);
-
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {loading ? <Loader position='absolute' size={70}/> : (

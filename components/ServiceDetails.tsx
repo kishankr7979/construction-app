@@ -10,7 +10,8 @@ const ServiceDetails = ({route, navigation}: WebviewProps) => {
     const {packageDetails} = route.params;
     console.log(packageDetails);
     return (
-        <View style={styles.conatiner}>
+        <>
+            <View style={styles.container}>
             <View  style={styles.subContainer}>
                 <View style={styles.descContainer}>
                 <ImageBackground source={require('../assets/paint.jpeg')} resizeMode='stretch' style={{width: '100%', height: '100%', borderRadius: 15, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -23,24 +24,48 @@ const ServiceDetails = ({route, navigation}: WebviewProps) => {
                     </ImageBackground> 
                 </View>              
             </View>
-            <ScrollView>
+            </View>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                 <View style={styles.scrollContents}>
+            <Text style={{fontSize: 40}}>hi</Text>
                 <Text style={{fontSize: 40}}>hi</Text>
                 <Text style={{fontSize: 40}}>hi</Text>
                 <Text style={{fontSize: 40}}>hi</Text>
                 <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                </View>
+                {/* <View style={styles.scrollContents}> */}
+                {/* <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text>
+                <Text style={{fontSize: 40}}>hi</Text> */}
+                {/* </View> */}
             </ScrollView>
-        </View>
+        </>
         
     )
 }
 
 const styles = StyleSheet.create({
-    conatiner:{
+    container:{
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    
     },
     subContainer: {
         display:'flex',
@@ -48,7 +73,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         width: '100%',
         backgroundColor: 'grey',
-        height:'69%',
+        height: 400,
         borderBottomRightRadius:25,
         borderBottomLeftRadius:25,
         borderColor: '#2196F3',
@@ -76,6 +101,24 @@ const styles = StyleSheet.create({
     iconImg:{
         display:'flex',
         flexDirection:'row'
+    },
+    scrollContainer: {
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+
+    },
+    scrollContents: {
+        marginTop: 20,
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: '#2196F3',
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        width: '90%',
     }
 })
 
