@@ -10,12 +10,12 @@ interface OnboardingProps {
     navigation: any;
 }
 const Onboarding = ({email, password, navigation}: OnboardingProps) => {
-    const [stepper, setStepper] = useState(1);
+    const navigationToHomeScreen = () => {
+        navigation.navigate('MainNavigationScreen');
+    }
     return (
         <View>
-            {stepper === 1 ?
-                <OnboardingProducts setStep={setStepper}/>
-                : stepper === 2 ? <OnboardingFormOne setStep={setStepper}/> : <Package email={email} password={password} navigation={navigation} />}
+            <OnboardingProducts setStep={navigationToHomeScreen}/>
         </View>
     )
 }

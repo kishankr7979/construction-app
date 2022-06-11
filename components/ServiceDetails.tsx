@@ -3,89 +3,83 @@ import {ScrollView,StyleSheet, View, Text,Image, ImageBackground, TouchableOpaci
 import RupeeIcon from 'react-native-vector-icons/FontAwesome';
 import Info from 'react-native-vector-icons/FontAwesome';
 import { color } from 'react-native-elements/dist/helpers';
+import UiDivider from '../common/UiDivider';
+import CarouselBanner from '../common/CarouselBanner'
 // import Popover from 'react-native-popover-view';
 interface WebviewProps {
     route: any;
     navigation: any,
     
 }
+const card = [
+    {
+        heading:"Standard Painting",
+        subHeading:"Speedy way to get your walls fixed and painted",
+        url:require('../assets/paint.jpeg')
+    },
+    {
+        heading:"Home Cover",
+        subHeading:"Get your home protected by our special covers",
+        url:require('../assets/banner-paints.jpeg')
+    },
+    {
+        heading:"Premium Way",
+        subHeading:"Get the most out of our service",
+        url:require('../assets/paint2.jpg')
+    },
+    {
+        heading:"Custom",
+        subHeading:"Get our services for your Plots",
+        url:require('../assets/paint-premium.jpg')
+    },
+]
 const ServiceDetails = ({route, navigation}: WebviewProps) => {
-    const {packageDetails} = route.params;
-    console.log(packageDetails);
+    const {productType} = route.params;
+    console.log(productType);
+    const data = [
+        {
+          id: 1,
+          name: 'banner-1',
+          url: require('../assets/promotionals.png'),
+        },
+        {
+          id: 2,
+          name: 'banner-2',
+          url: require('../assets/banner-paints.jpeg'),
+        },
+        {
+          id: 3,
+          name: 'banner-3',
+          url: require('../assets/delhi-ncr.webp'),
+        },
+      ];
     return (
        
             <View style={styles.container}>
              <View  style={styles.subContainer}>
                 <View style={styles.descContainer}>               
-                        <Image source={require('../assets/paint.jpeg')} style={{
-                        borderRadius: 10,width:150,height:140,
-                        overflow: "hidden",
-                        }} resizeMode='cover' />
-                        <View style={{borderBottomColor: 'grey', backgroundColor: 'grey',borderBottomWidth: 1,width:'100%'}} ></View>
-                        <View style={{marginTop:5}}></View>                   
+                <CarouselBanner data={data} autoPlay autoPlayDuration={3000} />
+                    
                 </View>              
             </View>
             <ScrollView >
-                <View style={styles.card}>
-                    <View style={styles.subCard}>
-                    <Image source={require('../assets/paint.jpeg')} style={{
-                     borderRadius: 10,width:150,height:140,
-                    overflow: "hidden",
-                  }} resizeMode='cover' />
-                    </View>
-                    <View style={styles.cardInfo}>
+                {card.map((item)=>{
+                    return(
+                        <View style={styles.card}>
+                            <View style={styles.subCard}>
+                                <Image source={item.url} style={{borderRadius: 10,width:150,height:140,overflow: "hidden",}}  resizeMode='cover' />
+                            </View>
+                        <View style={styles.cardInfo}>
                         <View style={styles.cardInfoDetails}>
-                            <Text style={{fontSize:16,opacity:0.7,letterSpacing:1, color:'white'}}>Standard Painting{'\n'}</Text>
-                            <Text style={{fontSize:14,opacity:0.6,letterSpacing:1,color:'white'}}>Speedy way to get your walls fixed and painted</Text>
+                            <Text style={{fontSize:16,letterSpacing:1, color:'#242526'}}>{item.heading}{'\n'}</Text>
+                            <Text style={{fontSize:14,letterSpacing:1,color:'#242526'}}>{item.subHeading}</Text>
                         </View>
                     </View>
+                    <UiDivider />
                 </View>
-                <View style={{borderBottomColor: 'grey', backgroundColor: 'grey',borderBottomWidth: 1,width:'100%'}} ></View>
-                <View style={styles.card}>
-                    <View style={styles.subCard}>
-                    <Image source={require('../assets/paint.jpeg')} style={{
-                     borderRadius: 10,width:150,height:140,
-                    overflow: "hidden",
-                  }} resizeMode='cover' />
-                    </View>
-                    <View style={styles.cardInfo}>
-                        <View style={styles.cardInfoDetails}>
-                            <Text style={{fontSize:16,opacity:0.7,letterSpacing:1, color:'white'}}>Home Cover{'\n'}</Text>
-                            <Text style={{fontSize:14,opacity:0.6,letterSpacing:1,color:'white'}}>Get your home protected by our special covers</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{borderBottomColor: 'grey', backgroundColor: 'grey',borderBottomWidth: 1,width:'100%'}} ></View>
-                <View style={styles.card}>
-                    <View style={styles.subCard}>
-                    <Image source={require('../assets/paint.jpeg')} style={{
-                     borderRadius: 10,width:150,height:140,
-                    overflow: "hidden",
-                  }} resizeMode='cover' />
-                    </View>
-                    <View style={styles.cardInfo}>
-                        <View style={styles.cardInfoDetails}>
-                        <Text style={{fontSize:16,opacity:0.7,letterSpacing:1, color:'white'}}>Premium Way{'\n'}</Text>
-                            <Text style={{fontSize:14,opacity:0.6,letterSpacing:1,color:'white'}}>Get the most out of our service</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{borderBottomColor: 'grey', backgroundColor: 'grey',borderBottomWidth: 1,width:'100%'}} ></View>
-                <View style={styles.card}>
-                    <View style={styles.subCard}>
-                    <Image source={require('../assets/paint.jpeg')} style={{
-                     borderRadius: 10,width:150,height:140,
-                    overflow: "hidden",
-                  }} resizeMode='cover' />
-                    </View>
-                    <View style={styles.cardInfo}>
-                        <View style={styles.cardInfoDetails}>                           
-                        <Text style={{fontSize:16,opacity:0.7,letterSpacing:1, color:'white'}}>Custom{'\n'}</Text>
-                            <Text style={{fontSize:14,opacity:0.6,letterSpacing:1,color:'white'}}>No matter how big your paradise is, we're here to make it even more beautiful</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{borderBottomColor: 'grey', backgroundColor: 'grey',borderBottomWidth: 1,width:'100%'}} ></View>
+                    );
+                })}
+                <Text>{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}</Text>
             </ScrollView>
             </View>
        
@@ -105,22 +99,24 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         width: '100%',
-        // backgroundColor: '#242526',
         height: 250,
         borderBottomRightRadius:25,
         borderBottomLeftRadius:25,
         borderWidth: 3,
-        borderColor:"#FFFFFF"
+        borderColor:'#FFFFFF',
+        borderBottomColor:"#651fff",
+        elevation: 5
     },
     descContainer:{
         display:'flex',
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#FFFFFF',
         borderColor:'#FFFFFF',
         width: '90%',
-        height:'80%',
+        height:'90%',
+        // padding:10,
         borderRadius:20,
+        
     },
     text:{
         fontSize:30,
@@ -151,28 +147,34 @@ const styles = StyleSheet.create({
         display:'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF',
+        // backgroundColor: '#FFFFFF',
         width: '90%',
     },
     card:{
     // backgroundColor:'#fff',
     borderRadius:10,
-    boxShadow:'0 10px 10px rgba(0, 0, 0, 0.2)',
+
     display:'flex',
     flexDirection:'row',
     maxWidth:'100%',
     margin:20,
     overflow:'hidden',
     width:350,
-    backgroundColor:'#2A265F'
+    borderColor:'#FFFFFF',
+    borderWidth:1
+    // backgroundColor:'#FFFFFF'
     },
     subCard:{
-        // backgroundColor:'#2A265F',
+        
         // color:'white',
         // padding:30,
+        // borderWidth: 1,
+        // borderColor: '#FFFFFF',
+
         maxWidth:150,
     },
     cardInfo:{
+        // backgroundColor:'#9b6dff',
         padding:10,
         position:'relative',
         width:'100%'
