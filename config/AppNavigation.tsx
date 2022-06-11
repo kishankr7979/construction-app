@@ -10,8 +10,7 @@ import { Session } from '@supabase/supabase-js'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Home from '../components/Home';
+import ServiceDetails from '../components/ServiceDetails';
 import Loader from '../common/Loader';
 import Onboarding from '../components/Onboarding';
 import Profile from '../components/Profile';
@@ -69,6 +68,7 @@ export default function AppNavigation() {
             }} />
             <Stack.Screen name='Onboarding' component={Onboarding} options={{ headerShown: false }} />
             <Stack.Screen name='Webview' options={{ headerShown: true, headerTitle: 'Edit Profile', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <Webview {...props} />}</Stack.Screen>
+            <Stack.Screen name='PackageDetails' options={{ headerShown: true, headerTitle: 'Package', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <ServiceDetails {...props} />}</Stack.Screen>
           </Stack.Navigator>
         </>
       )}
