@@ -1,7 +1,7 @@
 import 'react-native-url-polyfill/auto'
 import { useState, useEffect, useLayoutEffect } from 'react'
 import HomeIcon from 'react-native-vector-icons/AntDesign';
-import {Button, Alert} from 'react-native';
+import { Button, Alert } from 'react-native';
 import { supabase } from '../lib/supabase'
 import Auth from '../components/Auth'
 import Account from '../components/Account'
@@ -31,26 +31,26 @@ export default function AppNavigation() {
     setLoading(false);
   }, [])
   const createTwoButtonAlert = () =>
-  Alert.alert(
-    "Logout",
-    "are you sure?",
-    [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel"
-      },
-      { text: "Logout", onPress: () => logout() }
-    ]
-  );
+    Alert.alert(
+      "Logout",
+      "are you sure?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Logout", onPress: () => logout() }
+      ]
+    );
   const logout = () => {
-      supabase.auth.signOut()
+    supabase.auth.signOut()
   }
   const BottomTabs = () => {
     return (
       <Tabs.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
-        <Tabs.Screen name='Home' component={Account} options={{ tabBarLabel:'Home', tabBarIcon: ({ color }) => (<HomeIcon name='home' color='#2196F3' size={30}/>), }} />
-        <Tabs.Screen name='Profile' component={Profile} options={{ tabBarLabel:'Profile', tabBarIcon: ({ color }) => (<HomeIcon name='user' color='#2196F3' size={30}/>), }} />
+        <Tabs.Screen name='Home' component={Account} options={{ tabBarIcon: ({ color }) => (<HomeIcon name='home' color='#2196F3' size={30} />), }} />
+        <Tabs.Screen name='Profile' component={Profile} options={{ tabBarIcon: ({ color }) => (<HomeIcon name='user' color='#2196F3' size={30} />), }} />
       </Tabs.Navigator>
     );
   }
@@ -60,13 +60,15 @@ export default function AppNavigation() {
         <>
           {console.log('session exist')}
           <Stack.Navigator initialRouteName='MainNavigationScreen'>
-            <Stack.Screen name='MainNavigationScreen' component={BottomTabs} options={{ headerShown: true, headerTitle: 'ConstrucTech',headerRight: () => (
-            <Button
-              onPress={createTwoButtonAlert}
-              title="Logout"
-            />), headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }} />
+            <Stack.Screen name='MainNavigationScreen' component={BottomTabs} options={{
+              headerShown: true, headerTitle: 'ConstrucTech', headerRight: () => (
+                <Button
+                  onPress={createTwoButtonAlert}
+                  title="Logout"
+                />), headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' }
+            }} />
             <Stack.Screen name='Onboarding' component={Onboarding} options={{ headerShown: false }} />
-            <Stack.Screen name='Webview' options={{ headerShown: false }}>{props => <Webview {...props}/>}</Stack.Screen>
+            <Stack.Screen name='Webview' options={{ headerShown: true, headerTitle: 'Edit Profile', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <Webview {...props} />}</Stack.Screen>
           </Stack.Navigator>
         </>
       )}
@@ -82,6 +84,7 @@ export default function AppNavigation() {
           <Stack.Navigator initialRouteName='LoginScreen'>
             {/* <Stack.Screen name='OnboardingProducts' component={OnboardingProducts} options={{headerShown: false}} /> */}
             <Stack.Screen name='LoginScreen' component={Auth} options={{ headerShown: false }} />
+            <Stack.Screen name='NoSessionWebview' options={{ headerShown: false }}>{props => <Webview {...props} />}</Stack.Screen>
             {/* <Stack.Screen name='Package' component={OnboardingFormTwo} options={{headerShown: false}} /> */}
 
           </Stack.Navigator>
