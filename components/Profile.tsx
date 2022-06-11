@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet, ScrollView, Linking, TouchableWithoutFeedback} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Linking, TouchableWithoutFeedback } from 'react-native';
 import React, { useEffect, useState } from 'react'
 import { supabase } from "../lib/supabase";
 import Loader from '../common/Loader';
 import CheckIcon from 'react-native-vector-icons/Entypo'
 import UserIcon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WebView } from 'react-native-webview';
-const Profile = ({navigation}) => {
+const Profile = ({ navigation }) => {
     const [userSession, setUserSession] = useState<any>();
     const [userDetails, setUserDetails] = useState<any>();
     const [loading, setLoading] = useState<boolean>(false);
@@ -13,6 +14,15 @@ const Profile = ({navigation}) => {
     const fetchUserSession = async () => {
         const user = supabase.auth.user();
         setUserSession(user);
+    }
+    const getDataFromAsyncStorage = async(key) => {
+        try{
+            const jsonValue = await AsyncStorage.getItem(key);
+            return jsonValue != null ? JSON.parse(jsonValue) : null;
+        }
+        catch(e){
+            console.log(e);
+        }
     }
     const getUserDetails = async () => {
         setLoading(true);
@@ -38,29 +48,31 @@ const Profile = ({navigation}) => {
     }
     const openWebview = () => {
         console.log('triggered');
-        navigation.navigate('Webview', {url: `https://constructech-webview.netlify.app/update-form?id=${userSession?.id}`, afterWebviewClose: 'Profile'});
+        navigation.navigate('Webview', { url: `https://constructech-webview.netlify.app/update-form?id=${userSession?.id}`, afterWebviewClose: 'Profile' });
     }
     useEffect(() => {
-        Promise.all([fetchUserSession(), getUserDetails(), getServicesDetails()])
-    }, [userSession?.id !== undefined, userDetails !== undefined, userDetails !== null, serviceDetails !== undefined, serviceDetails !== null])
+        if (userDetails === undefined) {
+            Promise.all([fetchUserSession(), getUserDetails(), getServicesDetails()])
+        }
+    }, [userSession?.id !== undefined])
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             Promise.all([fetchUserSession(), getUserDetails(), getServicesDetails()])
         });
         return unsubscribe;
-      }, [navigation]);
-
+    }, [navigation]);
     return (
-        <ScrollView >
-            <View style={styles.container}>
-                    {!loading && <View style={styles.avatarContainer}>
-                    <UserIcon name='user' size={30} color='#2196F3' />
-                </View>}
+        <ScrollView contentContainerStyle={styles.container}>
+            {loading ? <Loader position='absolute' size={70}/> : (
+            <>
+            <View style={styles.avatarContainer}>
+                <UserIcon name='user' size={30} color='#2196F3' />
+            </View>
             <View style={styles.userDetailsContainer}>
-                {loading ? (<Loader />) : (<>
-                <View style={styles.editContainer}>
-                <UserIcon name='edit' size={30} color='#2196F3' onPress={openWebview}/>
-                </View>
+                <>
+                    <View style={styles.editContainer}>
+                        <UserIcon name='edit' size={30} color='#2196F3' onPress={openWebview} />
+                    </View>
                     <View style={styles.userDetails}>
                         <Text style={styles.detailTitle}>Name:</Text>
                         <Text style={styles.detailsDescription}>{userDetails?.[0]?.name}</Text>
@@ -81,54 +93,53 @@ const Profile = ({navigation}) => {
                         <Text style={styles.detailTitle}>Email:</Text>
                         <Text style={styles.detailsDescription}>{userSession?.email}</Text>
                     </View>
-                </>)}
+                </>
             </View>
             <View style={styles.userDetailsContainer}>
-                {loading ? <Loader /> : (
-                    <>
-                     <Text style={{fontSize: 30,}}>Services</Text>
-                     {serviceDetails?.[0].package && (
-                         <View style={styles.userDetails}>
-                             <Text style={styles.detailTitle}>Complete Package: </Text>
-                             <CheckIcon name='check' size={30} />
-                         </View>
-                     )}
-                     {!serviceDetails?.[0]?.package && (
-                         <>
-                             <View style={styles.userDetails}>
-                                 <Text style={styles.detailTitle}>
-                                     Flooring
+                <>
+                    <Text style={{ fontSize: 30, }}>Services</Text>
+                    {serviceDetails?.[0].package && (
+                        <View style={styles.userDetails}>
+                            <Text style={styles.detailTitle}>Complete Package: </Text>
+                            <CheckIcon name='check' size={30} />
+                        </View>
+                    )}
+                    {!serviceDetails?.[0]?.package && (
+                        <>
+                            <View style={styles.userDetails}>
+                                <Text style={styles.detailTitle}>
+                                    Flooring
                               </Text>
-                                 {serviceDetails?.[0]?.custom_services?.flooring ? <CheckIcon name='check' size={30} color='#2196F3'/> : <CheckIcon name='cross' size={30} color='red'/>}
-     
-                             </View>
-                             <View style={styles.userDetails}>
-                                 <Text style={styles.detailTitle}>
-                                     Furnishing
+                                {serviceDetails?.[0]?.custom_services?.flooring ? <CheckIcon name='check' size={30} color='#2196F3' /> : <CheckIcon name='cross' size={30} color='red' />}
+
+                            </View>
+                            <View style={styles.userDetails}>
+                                <Text style={styles.detailTitle}>
+                                    Furnishing
                               </Text>
-                                 {serviceDetails?.[0]?.custom_services?.furnishing ? <CheckIcon name='check' size={30} color='#2196F3'/> : <CheckIcon name='cross' size={30} color='red'/>}
-     
-                             </View>
-                             <View style={styles.userDetails}>
-                                 <Text style={styles.detailTitle}>
-                                     Painting
+                                {serviceDetails?.[0]?.custom_services?.furnishing ? <CheckIcon name='check' size={30} color='#2196F3' /> : <CheckIcon name='cross' size={30} color='red' />}
+
+                            </View>
+                            <View style={styles.userDetails}>
+                                <Text style={styles.detailTitle}>
+                                    Painting
                               </Text>
-                                 {serviceDetails?.[0]?.custom_services?.painting ? <CheckIcon name='check' size={30} color='#2196F3'/> : <CheckIcon name='cross' size={30} color='red'/>}
-     
-                             </View>
-                             <View style={styles.userDetails}>
-                                 <Text style={styles.detailTitle}>
-                                     Plumber
+                                {serviceDetails?.[0]?.custom_services?.painting ? <CheckIcon name='check' size={30} color='#2196F3' /> : <CheckIcon name='cross' size={30} color='red' />}
+
+                            </View>
+                            <View style={styles.userDetails}>
+                                <Text style={styles.detailTitle}>
+                                    Plumber
                               </Text>
-                                 {serviceDetails?.[0]?.custom_services?.plumber ? <CheckIcon name='check' size={30} color='#2196F3'/> : <CheckIcon name='cross' size={30} color='red'/>}
-     
-                             </View>
-                         </>
-                     )}
-                     </>
-                )}
+                                {serviceDetails?.[0]?.custom_services?.plumber ? <CheckIcon name='check' size={30} color='#2196F3' /> : <CheckIcon name='cross' size={30} color='red' />}
+
+                            </View>
+                        </>
+                    )}
+                </>
             </View>
-            </View>
+            </>
+            )}
         </ScrollView>
     )
 }
@@ -136,10 +147,9 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        width: '100%',
         backgroundColor: '#000000',
+        height: '100%',
+        position: 'relative',
     },
     userDetailsContainer: {
         position: 'relative',
@@ -156,7 +166,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
     avatarContainer: {
-        height: 80, width: 80, borderWidth: 2, borderColor: '#2196F3', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 80, position: 'relative', top: 35, zIndex: 2,backgroundColor: '#FFFFFF',
+        height: 80, width: 80, borderWidth: 2, borderColor: '#2196F3', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 80, position: 'relative', top: 35, zIndex: 2, backgroundColor: '#FFFFFF',
     },
     userDetails: {
         display: 'flex',

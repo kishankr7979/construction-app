@@ -45,7 +45,8 @@ export default function Auth({navigation}) {
     const storeValue = JSON.stringify(user);
     await AsyncStorage.setItem('authenticatedUser', storeValue);
     if (error) Alert.alert(error.message)
-    if(user) Alert.alert('Please confirm your email and then sign In');
+    console.log(user);
+   Alert.alert('Please confirm your email and then sign In');
     setLoading(false)
   }
   const onSubmit = async() => {

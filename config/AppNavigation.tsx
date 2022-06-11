@@ -1,6 +1,7 @@
 import 'react-native-url-polyfill/auto'
 import { useState, useEffect, useLayoutEffect } from 'react'
 import HomeIcon from 'react-native-vector-icons/AntDesign';
+import OffIcon from 'react-native-vector-icons/FontAwesome';
 import { Button, Alert } from 'react-native';
 import { supabase } from '../lib/supabase'
 import Auth from '../components/Auth'
@@ -29,7 +30,7 @@ export default function AppNavigation() {
     })
     setLoading(false);
   }, [])
-  const createTwoButtonAlert = () =>
+  const logoutAlert = () =>
     Alert.alert(
       "Logout",
       "are you sure?",
@@ -60,11 +61,9 @@ export default function AppNavigation() {
           {console.log('session exist')}
           <Stack.Navigator initialRouteName='MainNavigationScreen'>
             <Stack.Screen name='MainNavigationScreen' component={BottomTabs} options={{
-              headerShown: true, headerTitle: 'ConstrucTech', headerRight: () => (
-                <Button
-                  onPress={createTwoButtonAlert}
-                  title="Logout"
-                />), headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' }
+              headerShown: true, headerTitleAlign: 'center' ,headerTitle: 'ContrucTech', headerRight: () => (
+                <OffIcon name='power-off' color='#FF0000' size={30} onPress={logoutAlert}/>
+                ), headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF', }
             }} />
             <Stack.Screen name='Onboarding' component={Onboarding} options={{ headerShown: false }} />
             <Stack.Screen name='Webview' options={{ headerShown: true, headerTitle: 'Edit Profile', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <Webview {...props} />}</Stack.Screen>
