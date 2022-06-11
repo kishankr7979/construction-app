@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { supabase } from "../lib/supabase";
-import { StyleSheet, View, Text, ScrollView, Image, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, ScrollView, Image, ImageBackground, TouchableOpacity } from "react-native";
 import { ApiError, Session } from "@supabase/supabase-js";
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -49,7 +49,7 @@ export default function Account({ navigation }, { session }: { session: Session 
     if (apiData?.length === 0) {
       navigation.navigate('Onboarding')
     }
-  })
+  },[apiData?.length])
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -57,47 +57,32 @@ export default function Account({ navigation }, { session }: { session: Session 
       setLoading(false);
     })();
   }, [])
-  console.log('hi');
-  console.log(servicePackage);
-  const card = (flatType, price, timeline) => {
-    return (
-      <View style={styles.cardContainer}>
-        <View style={styles.imageContainer}>
-                <Image source={require('../assets/paint.jpeg')} resizeMode="cover" style={{width: undefined, height: undefined, flex: 1, borderRadius: 5,}}>
-                {/* <Image source={require('../assets/paint.jpeg')} resizeMode='contain' style= {{flex:1 , width: '100%', height: '100%'}} /> */}
-                </Image>
-                </View>
-        <View style={styles.descriptionContainer}>
-                  <Text style={styles.title}>Painting Package for {flatType}BHK</Text>
-                  <Text style={styles.price}>Price: INR {price}</Text>
-                  <Text style={styles.timeline}>Timeline: {timeline}</Text>
-                </View>
-      </View>
-    );
+
+  const onPackageClick = (packageData: any) => {
+    navigation.navigate('PackageDetails', {packageDetails: packageData});
   }
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.subContainer}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.subContainer}>
         {loading ? <Loader /> : (<>
           {servicePackage.map((item) => {
             return (
-              <View style={styles.cardContainer}>
-                <View style={styles.imageContainer}>
-                <Image source={require('../assets/paint.jpeg')} resizeMode="cover" style={{width: undefined, height: undefined, flex: 1, borderRadius: 5,}}>
-                {/* <Image source={require('../assets/paint.jpeg')} resizeMode='contain' style= {{flex:1 , width: '100%', height: '100%'}} /> */}
-                </Image>
-                </View>
+              <TouchableOpacity style={styles.cardContainer} onPress={() => onPackageClick(item)} key={item.id}>
+                <ImageBackground style={styles.imageContainer} source={require('../assets/paint.jpeg')} resizeMode='cover' >
+                {/* <Image source={require('../assets/paint.jpeg')} resizeMode="contain">
+                </Image> */}
+                </ImageBackground>
                 <View style={styles.descriptionContainer}>
                   <Text style={styles.title}>Painting Package for {item.flatType}BHK</Text>
                   <Text style={styles.price}>Price: INR {item.price}</Text>
                   <Text style={styles.timeline}>Timeline: {item.timeline}</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </>)}
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -105,21 +90,19 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     display: 'flex',
-    // justifyContent: 'center',
+    justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
-    width: '100%',
     backgroundColor: '#000000',
   },
   subContainer: {
+    marginTop: 20,
     width: '90%',
-    position: 'absolute',
-    top: 20,
   },
   cardContainer: {
     display: 'flex',
     width: '100%',
-    flexDirection: 'row',
+    height: 500,
+    flexDirection: 'column',
     backgroundColor: '#FFFFFF',
     padding: 20,
     borderRadius: 10,
@@ -127,12 +110,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#2196F3',
   },
+  fontContainer: {
+    fontSize: 100,
+  },
   imageContainer: {
-    width: '30%',
+    width: '100%',
+    flex: 1,
   },
   descriptionContainer: {
     display: 'flex',
-    width: '70%',
+    width: '100%',
     flexDirection: 'column',
     marginLeft: 10,
   },
