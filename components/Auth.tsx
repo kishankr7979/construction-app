@@ -99,12 +99,12 @@ export default function Auth({navigation}) {
   return (
     <>
     <View style={styles.container}>
-        <View style={styles.titleContainer}>
+        {/* <View style={styles.titleContainer}>
         <Text style={styles.title}>CONSTRUCTECH</Text>
-      </View>
+      </View> */}
       <View style={styles.loginContainer}>
         <View style={{ position: 'absolute', top: 50, }}>
-          <UserIcon name='user-circle' size={50} />
+          <UserIcon name='user-circle' size={50} color='#651fff'/>
         </View>
         <TextInput
           onChangeText={(text) => setAuthData({...authData, email: text})}
@@ -127,10 +127,10 @@ export default function Auth({navigation}) {
         </View>
       </View>
       <View>
-       <Text style={{ color: '#FFFFFF' }}>{!showSignUp ? 'Not having account?' : 'Already having account?'}<Text style={{ color: '#2196F3', fontWeight: 'bold' }} onPress={signUpState}>{!showSignUp ? 'Sign Up' : 'Sign In'}</Text></Text>
+       <Text style={{ color: '#242526' }}>{!showSignUp ? 'Not having account?' : 'Already having account?'}<Text style={{ color: '#651fff', fontWeight: 'bold' }} onPress={signUpState}>{!showSignUp ? ' Sign Up' : ' Sign In'}</Text></Text>
       </View>
       <View>
-        {!showSignUp && <><Text onPress={forgotPassword} style={{ color: '#2196F3', fontWeight: 'bold' }}>Forgot Password</Text>
+        {!showSignUp && <><Text onPress={forgotPassword} style={{ color: '#651fff', fontWeight: 'bold' }}>Forgot Password</Text>
         <Dialog.Container visible={promptVisibility.isVisible}>
           <Dialog.Title>Forgot password</Dialog.Title>
           <Dialog.Input value={promptVisibility.message} onChangeText={(text) => setPromptVisibility({...promptVisibility, message: text})}></Dialog.Input>
@@ -150,14 +150,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     width: '100%',
-    backgroundColor: 'black',
+    // backgroundColor: '#cdc1ff',
+    // backgroundImage: 'linear-gradient(316deg, #cdc1ff 0%, #e5d9f2 74%)'
   },
   titleContainer: {
     position: 'relative',
     top: 20,
   },
   title: {
-    color: '#FFFFFF',
+    color: '#651fff',
     fontSize: 45,
   },
   loginContainer: {
@@ -168,18 +169,19 @@ const styles = StyleSheet.create({
     width: '90%',
     borderRadius: 20,
     height: 400,
-    backgroundColor: '#FFFFFF',
-    borderColor: '#2196F3',
+    borderColor: '#ffffff',
     borderWidth: 5,
     boxShadow: 10,
   },
   inputArea: {
     borderWidth: 1,
-    borderColor: '#2196F3',
+    borderColor: '#ffffff',
     width: '80%',
     height: 50,
     borderRadius: 10,
     textAlign: 'center',
+    color:'#651fff',
+    backgroundColor: '#FFFFFF',
   },
   Spacer: {
     marginTop: 10,

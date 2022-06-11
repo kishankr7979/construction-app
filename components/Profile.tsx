@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Linking, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Linking, TouchableWithoutFeedback, Button, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react'
 import { supabase } from "../lib/supabase";
 import Loader from '../common/Loader';
@@ -6,6 +6,8 @@ import CheckIcon from 'react-native-vector-icons/Entypo'
 import UserIcon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WebView } from 'react-native-webview';
+import UiDivider from '../common/UiDivider';
+import NextIcon from 'react-native-vector-icons/MaterialIcons';
 const Profile = ({ navigation }) => {
     const [userSession, setUserSession] = useState<any>();
     const [userDetails, setUserDetails] = useState<any>();
@@ -61,85 +63,50 @@ const Profile = ({ navigation }) => {
         });
         return unsubscribe;
     }, [navigation]);
+    const logoutAlert = () =>
+    Alert.alert(
+      "Logout",
+      "are you sure?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Logout", onPress: () => logout() }
+      ]
+    );
+    const logout = () => {
+        // navigation.navigate('Profile');
+        supabase.auth.signOut()
+      }
+      console.log(userDetails);
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            {/* {loading ? <Loader position='absolute' size={70}/> : (
-            <>
-            <View style={styles.avatarContainer}>
-                <UserIcon name='user' size={30} color='#2196F3' />
+            <View style={styles.userContainer}>
+    <Text style={styles.userName}>Hi, {userDetails?.[0]?.name !== '' ? userDetails?.[0]?.name : 'User'}</Text>
+
+                <Button title={userDetails?.[0]?.name !== '' ? 'Edit' : 'Add'} color='#651fff' onPress={openWebview}/>
             </View>
-            <View style={styles.userDetailsContainer}>
-                <>
-                    <View style={styles.editContainer}>
-                        <UserIcon name='edit' size={30} color='#2196F3' onPress={openWebview} />
-                    </View>
-                    <View style={styles.userDetails}>
-                        <Text style={styles.detailTitle}>Name:</Text>
-                        <Text style={styles.detailsDescription}>{userDetails?.[0]?.name}</Text>
-                    </View>
-                    <View style={styles.userDetails} >
-                        <Text style={styles.detailTitle}>Phone:</Text>
-                        <Text style={styles.detailsDescription}>{userDetails?.[0]?.phone}</Text>
-                    </View>
-                    <View style={styles.userDetails}>
-                        <Text style={styles.detailTitle}>Occupation:</Text>
-                        <Text style={styles.detailsDescription}>{userDetails?.[0]?.occupation}</Text>
-                    </View>
-                    <View style={styles.userDetails}>
-                        <Text style={styles.detailTitle}>Address:</Text>
-                        <Text style={styles.detailsDescription}>{userDetails?.[0]?.address}</Text>
-                    </View>
-                    <View style={styles.userDetails}>
-                        <Text style={styles.detailTitle}>Email:</Text>
-                        <Text style={styles.detailsDescription}>{userSession?.email}</Text>
-                    </View>
-                </>
+            <UiDivider />
+            <View style={styles.supportContainer}>
+                <Text style={[styles.userName, {fontSize: 15,}]}>Help and Support</Text>
+                <NextIcon name='navigate-next' size={30} color='#651fff' />
             </View>
-            <View style={styles.userDetailsContainer}>
-                <>
-                    <Text style={{ fontSize: 30, }}>Services</Text>
-                    {serviceDetails?.[0].package && (
-                        <View style={styles.userDetails}>
-                            <Text style={styles.detailTitle}>Complete Package: </Text>
-                            <CheckIcon name='check' size={30} />
-                        </View>
-                    )}
-                    {!serviceDetails?.[0]?.package && (
-                        <>
-                            <View style={styles.userDetails}>
-                                <Text style={styles.detailTitle}>
-                                    Flooring
-                              </Text>
-                                {serviceDetails?.[0]?.custom_services?.flooring ? <CheckIcon name='check' size={30} color='#2196F3' /> : <CheckIcon name='cross' size={30} color='red' />}
-
-                            </View>
-                            <View style={styles.userDetails}>
-                                <Text style={styles.detailTitle}>
-                                    Furnishing
-                              </Text>
-                                {serviceDetails?.[0]?.custom_services?.furnishing ? <CheckIcon name='check' size={30} color='#2196F3' /> : <CheckIcon name='cross' size={30} color='red' />}
-
-                            </View>
-                            <View style={styles.userDetails}>
-                                <Text style={styles.detailTitle}>
-                                    Painting
-                              </Text>
-                                {serviceDetails?.[0]?.custom_services?.painting ? <CheckIcon name='check' size={30} color='#2196F3' /> : <CheckIcon name='cross' size={30} color='red' />}
-
-                            </View>
-                            <View style={styles.userDetails}>
-                                <Text style={styles.detailTitle}>
-                                    Plumber
-                              </Text>
-                                {serviceDetails?.[0]?.custom_services?.plumber ? <CheckIcon name='check' size={30} color='#2196F3' /> : <CheckIcon name='cross' size={30} color='red' />}
-
-                            </View>
-                        </>
-                    )}
-                </>
+            <UiDivider /> 
+            <View style={styles.supportContainer}>
+                <Text style={[styles.userName, {fontSize: 15,}]}>Privacy Policy</Text>
+                <NextIcon name='navigate-next' size={30} color='#651fff' />
             </View>
-            </>
-            )} */}
+            <UiDivider />
+            <View style={styles.supportContainer}>
+                <Text style={[styles.userName, {fontSize: 15,}]}>Log Out</Text>
+                <NextIcon name='logout' size={30} color='red' onPress={logoutAlert}/>
+            </View>
+            <UiDivider /> 
+            <View style={[styles.versionContainer]}>
+                <Text style={{color: '#242526',}}>version: Beta 0.1.0</Text>
+            </View>
         </ScrollView>
     )
 }
@@ -147,9 +114,37 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: '#000000',
+        // backgroundColor: '#000000',
         height: '100%',
         position: 'relative',
+    },
+    userContainer: {
+        display:'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        padding: 20,
+    },
+    userName: {
+        fontSize: 25,
+        color: '#651fff',
+    },
+    supportContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        alignItems: 'center',
+        padding: 20,
+    },
+    versionContainer: {
+        position: 'absolute',
+        bottom: 20,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 30,
     },
     userDetailsContainer: {
         position: 'relative',

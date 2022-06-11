@@ -31,27 +31,10 @@ export default function AppNavigation() {
     })
     setLoading(false);
   }, [])
-  const logoutAlert = (navigation) =>
-    Alert.alert(
-      "Logout",
-      "are you sure?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "Logout", onPress: () => logout(navigation) }
-      ]
-    );
-  const logout = (navigation) => {
-    // navigation.navigate('Profile');
-    // supabase.auth.signOut()
-  }
   const BottomTabs = () => {
     return (
       <Tabs.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
-        <Tabs.Screen name='Home' component={Account}   options={{ tabBarShowLabel: false, tabBarIcon: ({ focused }) => (<HomeIcon name='home' color={focused ? '#651fff' : '#242526'} size={30} />), }} />
+        <Tabs.Screen name='Home' component={Account}  options={{ tabBarShowLabel: false, tabBarIcon: ({ focused }) => (<HomeIcon name='home' color={focused ? '#651fff' : '#242526'} size={30} />), }} />
         <Tabs.Screen name='Profile' component={Profile} options={{ tabBarShowLabel: false,tabBarIcon: ({ focused }) => (<OrderIcon name='card-account-details-outline' color={focused ? '#651fff' : '#242526'} size={30} />), }} />
       </Tabs.Navigator>
     );
