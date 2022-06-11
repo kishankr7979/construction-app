@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TextInput, Button, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Button, ImageBackground, Alert } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { supabase } from "../lib/supabase";
 interface OnboardingFormOne {
   setStep: (id) => void;
 }
@@ -47,6 +49,21 @@ const OnboardingFormOne = ({setStep}: OnboardingFormOne) => {
   ]
 
   const [submitButtonState, setSubmitButtonState] = useState(false);
+  const [userDetails, setUserDetails] = useState<any>();
+  const getDataFromAsyncStorage = async() => {
+    try{
+        const jsonValue = await AsyncStorage.getItem('authenticatedUser');
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    }
+    catch(e){
+        console.log(e);
+    }
+}
+useEffect(() => {
+    (async () => {
+        setUserDetails(await getDataFromAsyncStorage());
+      })();
+},[])
 
   useEffect(() => {
     if (formData.name.length > 0 && formData.address.length > 0 && formData.occupation.length > 0 && formData.phone.length > 0) {
@@ -56,8 +73,19 @@ const OnboardingFormOne = ({setStep}: OnboardingFormOne) => {
       setSubmitButtonState(false);
     }
   }, [formData])
-  const sendFormData = () => {
-    console.log(formData);
+  const sendFormData = async () => {
+    // const { data, error } = await supabase
+    // .from('user-db')
+    // .insert([
+
+    //   { created_at: new Date(), name: formData.name, phone: formData.phone, address: formData.address, occupation: formData.occupation, uuid:  userDetails.id},
+    // ])
+    // console.log(data);
+    // if(error){
+    //  console.log(error);
+    // }
+    const data = JSON.stringify(formData);
+    await AsyncStorage.setItem('userData', data);
     setStep(3);
   }
   return (

@@ -5,18 +5,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserIcon from 'react-native-vector-icons/FontAwesome';
 import Onboarding from '../components/Onboarding';
 export default function Auth({navigation}) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false)
   const [showSignUp, setShowSignUp] = useState(false);
   const [submitButtonState, setSubmitButtonState] = useState(false);
+  const [authData, setAuthData] = useState({
+    email: '',
+    password: '',
+  })
   async function signInWithEmail() {
-    setLoading(true)
     try{
       const { user, error } = await supabase.auth.signIn({
-        email: email,
-        password: password,
+        email: authData.email,
+        password: authData.password,
       })
       const storeValue = JSON.stringify(user);
       await AsyncStorage.setItem('authenticatedUser', storeValue);
@@ -24,18 +25,29 @@ export default function Auth({navigation}) {
         Alert.alert(error.message) 
         return
       }
-      navigation.navigate('WelcomeScreen');
     }
     catch(e){
       console.log(e);
     }
-   
+  }
+  async function signUpWithEmail() {
+    setLoading(true)
+    const { user, error } = await supabase.auth.signUp({
+      email: authData.email,
+      password: authData.password,
+    })
+    const storeValue = JSON.stringify(user);
+    await AsyncStorage.setItem('authenticatedUser', storeValue);
+    if (error) Alert.alert(error.message)
+    // if(user) Alert.alert('Please confirm your email and then sign In');
     setLoading(false)
   }
-
   const onSubmit = async() => {
     if(showSignUp){
-      setStep(2);
+      // const passData = JSON.stringify(authData);
+      // await AsyncStorage.setItem('authData', passData);
+      // setStep(2);
+     await signUpWithEmail();
     }
     else {
       await signInWithEmail();
@@ -45,30 +57,20 @@ export default function Auth({navigation}) {
 
   const signUpState = () => {
     setShowSignUp(!showSignUp);
-    setEmail('');
-    setPassword('');
-  }
-  async function signUpWithEmail() {
-    setLoading(true)
-    const { user, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    })
-    console.log(user);
-    if (error) Alert.alert(error.message)
-    setLoading(false)
+    setAuthData({...authData, email: ''});
+    setAuthData({...authData, password: ''});
   }
   useEffect(() => {
-    if(email.length < 5 || password.length < 4){
+    if(authData.email.length < 5 || authData.password.length < 4){
       setSubmitButtonState(true);
     }
     else{
       setSubmitButtonState(false);
     }
-  },[email, password])
+  },[authData.email, authData.password])
   return (
     <>
-    {step === 1 ? (<View style={styles.container}>
+    <View style={styles.container}>
         <View style={styles.titleContainer}>
         <Text style={styles.title}>CONSTRUCTECH</Text>
       </View>
@@ -77,16 +79,16 @@ export default function Auth({navigation}) {
           <UserIcon name='user-circle' size={50} />
         </View>
         <TextInput
-          onChangeText={(text) => setEmail(text)}
-          value={email}
+          onChangeText={(text) => setAuthData({...authData, email: text})}
+          value={authData.email}
           placeholder="email@address.com"
           autoCapitalize={'none'}
           style={styles.inputArea}
         />
         <View style={styles.Spacer} />
         <TextInput
-          onChangeText={(text) => setPassword(text)}
-          value={password}
+          onChangeText={(text) => setAuthData({...authData, password: text})}
+          value={authData.password}
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={'none'}
@@ -99,9 +101,9 @@ export default function Auth({navigation}) {
       <View>
        <Text style={{ color: '#FFFFFF' }}>{!showSignUp ? 'Not having account?' : 'Already having account?'}<Text style={{ color: '#2196F3', fontWeight: 'bold' }} onPress={signUpState}>{!showSignUp ? 'Sign Up' : 'Sign In'}</Text></Text>
       </View>
-      </View>) : (<View><Onboarding /></View>)}
+      </View>
     </>
-  )
+  );
 }
 const styles = StyleSheet.create({
   container: {

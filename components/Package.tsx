@@ -1,8 +1,10 @@
-import React,  {useState} from 'react'
-import {View, Text, StyleSheet, TouchableOpacity,ImageBackground, Button} from 'react-native';
+import React,  {useState, useLayoutEffect, useEffect} from 'react'
+import {View, Text, StyleSheet, TouchableOpacity,ImageBackground, Button, Alert} from 'react-native';
 import { CheckBox } from 'react-native-elements'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import PackageIcon from 'react-native-vector-icons/Feather';
 import ServicesIcon from 'react-native-vector-icons/MaterialIcons'
+import { supabase } from '../lib/supabase'
 type ProductType = {
     id: number,
     productId: string,
@@ -18,18 +20,85 @@ type ServicesType = {
     value: boolean,
     onchange: (val: boolean) => void,
 }
-const OnboardingFormTwo = () => {
+
+interface Properties {
+    email: any;
+    password: any;
+    navigation: any;
+}
+const OnboardingFormTwo = ({email, password, navigation}: Properties) => {
     const [selectCategory, setSelectedCategory] = useState();
     const [paiting, setPaiting] = useState(false);
     const [flooring, setFlooring] = useState(false);
     const [furnishing, setFurnishing] = useState(false);
     const [plumber, setPlumber] = useState(false);
-    // const [services, setServices] = useState({
-    //     Painting: false,
-    //     Flooring: false,
-    //     Furnishing: false,
-    //     Plumber: false,
-    // });
+    const [userData, setUserData] = useState<any>();
+    const [sessionData, setSessionData] = useState<any>();
+    const getDataFromAsyncStorage = async() => {
+        try{
+            const jsonValue = await AsyncStorage.getItem('userData');
+            return jsonValue != null ? JSON.parse(jsonValue) : null;
+        }
+        catch(e){
+            console.log(e);
+        }
+    }
+    useLayoutEffect(() => {
+        (async () => {
+            setUserData(await getDataFromAsyncStorage());
+          })();
+           console.log(userData);
+    },[userData !== undefined])
+
+    const createUser = async() => {
+        const { user, error } = await supabase.auth.signUp({
+            email: email?.email?.email,
+            password: email?.email?.password,
+          })
+          console.log(user);
+          if (error) Alert.alert(error.message)
+    }
+    console.log(email?.email?.password);
+    const fetchSession = async() => {
+        const res = await supabase.auth.session()
+        setSessionData(res);
+    }
+    const sendUserDetails = async() => {
+    const { data, error } = await supabase
+    .from('user-db')
+    .insert([
+      { created_at: new Date(), name: userData.name, phone: userData.phone, address: userData.address, occupation: userData.occupation, uuid:  sessionData.user.id},
+    ])
+    console.log(data);
+    if(error){
+     console.log(error);
+    }
+    }
+
+    const sendServicesData = async() => {
+        const { data, error } = await supabase
+        .from('services-db')
+        .insert([
+          { uuid:sessionData.user.id, created_at: new Date(), package: selectCategory === 1, custom_services: selectCategory === 2 ? {
+            paiting: paiting,
+            flooring: flooring,
+            furnishing: furnishing,
+            plumber: plumber,
+          }: {}},
+        ])
+        console.log(data);
+        if(error){
+         console.log(error);
+        }
+    }
+    useEffect(() => {
+        fetchSession();
+    }, [sessionData?.user?.id !== undefined]);
+    const sendAllData = async() => {
+        Promise.all([sendUserDetails(), sendServicesData()])
+        navigation.navigate('MainNavigationScreen');
+    }
+    console.log(sessionData?.user?.id);
     const listOfProducts: ProductType[] = [
         {
             id: 1,
@@ -46,47 +115,12 @@ const OnboardingFormTwo = () => {
             status: true,
         }
     ]
-
-    // const Services: ServicesType[] = [
-    //     {
-    //         id: 1,
-    //         serviceId: 'serv-1',
-    //         serviceName: 'Painting',
-    //         status: true,
-    //         value:services.Painting,
-    //         onchange: (val) => setServices({...services, Painting: val}),
-    //     },
-    //     {
-    //         id: 2,
-    //         serviceId: 'serv-2',
-    //         serviceName: 'Flooring',
-    //         status: true,
-    //         value:services.Flooring,
-    //         onchange: (val) => setServices({...services, Flooring: val}),
-    //     },
-    //     {
-    //         id: 3,
-    //         serviceId: 'serv-3',
-    //         serviceName: 'Furnishing',
-    //         status: true,
-    //         value:services.Furnishing,
-    //         onchange: (val) => setServices({...services, Furnishing: val}),
-    //     },
-    //     {
-    //         id: 4,
-    //         serviceId: 'serv-4',
-    //         serviceName: 'Plumber',
-    //         status: true,
-    //         value:services.Plumber,
-    //         onchange: (val) => setServices({...services, Plumber: val}),
-    //     },
-    // ]
     const selectProduct = (id, status) => {
         if(status === false) return;
         setSelectedCategory(id);
     }
     return (
-            <ImageBackground  source={require('../assets/new-construction.jpeg')} style={[styles.container]}>
+            <ImageBackground  source={require('../assets/new-construction.png')} style={[styles.container]}>
             <View style={styles.productMainConatiner}>
                 {listOfProducts.map((item) => {
                     return (
@@ -103,7 +137,9 @@ const OnboardingFormTwo = () => {
                     <CheckBox title='Flooring' checked={flooring} onPress={() => setFlooring(!flooring)} />
                     <CheckBox title='Furnishing' checked={furnishing} onPress={() => setFurnishing(!furnishing)} />
                     <CheckBox title='Plumber' checked={plumber} onPress={() => setPlumber(!plumber)} />
+
                 </View>}
+                <Button title='NEXT' onPress={sendAllData} />
             </View>
             </ImageBackground>
     )

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { StyleSheet, View, Alert } from "react-native";
 import { Button, Input } from "react-native-elements";
@@ -10,11 +10,13 @@ export default function Account({navigation},{ session }: { session: Session }) 
   const [username, setUsername] = useState("");
   const [website, setWebsite] = useState("");
   const [avatar_url, setAvatarUrl] = useState("");
-
+  const [apiData, setApiData] = useState<any>();
+  const [userSession, setUserSession] = useState<any>(null)
   useEffect(() => {
-    if (session) getProfile();
-  }, [session]);
-
+    if (session){ 
+      getProfile()
+    };
+  }, []);
   async function getProfile() {
     try {
       setLoading(true);
@@ -41,92 +43,52 @@ export default function Account({navigation},{ session }: { session: Session }) 
       setLoading(false);
     }
   }
-
-  async function updateProfile({
-    username,
-    website,
-    avatar_url,
-  }: {
-    username: string;
-    website: string;
-    avatar_url: string;
-  }) {
-    try {
-      setLoading(true);
-      const user = supabase.auth.user();
-      if (!user) throw new Error("No user on the session!");
-
-      const updates = {
-        id: user.id,
-        username,
-        website,
-        avatar_url,
-        updated_at: new Date(),
-      };
-
-      let { error } = await supabase
-        .from("profiles")
-        .upsert(updates, { returning: "minimal" });
-
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      Alert.alert((error as ApiError).message);
-    } finally {
-      setLoading(false);
-    }
+const fetchApiData = async(userId) => {
+  const { data, error } = await supabase
+  .from('user-db')
+  .select()
+  .match({uuid: userId})
+  if(data){
+    setApiData(data);
   }
-
+  if(error){
+    console.log(error);
+  }
+}
+useEffect(() => {
+  setUserSession(supabase.auth.session())
+}, []);
+useEffect(() => {
+  if(userSession?.user?.id !== undefined){
+  (async() => {
+    await fetchApiData(userSession?.user?.id);
+    AsyncStorage.setItem('userId', userSession?.user?.id)
+  })()
+}
+},[userSession?.user?.id])
+useEffect(() => {
+  if(apiData?.length === 0){
+    console.log('new user');
+    navigation.navigate('Onboarding')
+  }
+  else{
+    console.log('existing user');
+  }
+})
+console.log(apiData);
   return (
-    <View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput placeholder='Email' value={session?.user?.email}/>
+      <View style={styles.container}>
       </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          placeholder="Username"
-          value={username || ""}
-          onChangeText={(text) => setUsername(text)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          placeholder="Website"
-          value={website || ""}
-          onChangeText={(text) => setWebsite(text)}
-        />
-      </View>
-
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title={loading ? "Loading ..." : "Update"}
-          onPress={() => updateProfile({ username, website, avatar_url })}
-          disabled={loading}
-        />
-      </View>
-
-      <View style={styles.verticallySpaced}>
-        <Button title="Sign Out" onPress={async() => {
-          supabase.auth.signOut()
-          }} />
-      </View>
-      <Button title='Home' onPress={() => navigation.navigate('WelcomeScreen')} />
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    padding: 12,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: "stretch",
-  },
-  mt20: {
-    marginTop: 20,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%',
+  width: '100%',
+  backgroundColor: '#000000',
   },
 });
