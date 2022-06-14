@@ -80,11 +80,15 @@ export default function Account({ navigation }, { session }: { session: Session 
               return (
                 <TouchableOpacity style={[styles.productContainer, { width: item.id > 3 ? '45%' : '30%' }]} key={item.id} onPress={()=>onProductClick(item.name)}>
                   <Image source={item.image} style={{
-                    width: '100%', height: '100%', borderRadius: 10,
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 10,
+                    borderWidth: 3,
+                    borderColor: '#FFFFFF',
                     overflow: "hidden",
                   }} resizeMode='cover' />
                   <View style={styles.productTitleContainer}>
-                  <Text style={[styles.productTitleName, {color: item.id === 1 || item.id === 4  || item.id === 5 ? '#242526' : '#FFFFFF'}]}>{item.name}</Text>
+                  <Text style={[styles.productTitleName]}>{item.name}</Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -170,7 +174,6 @@ const styles = StyleSheet.create({
     height: 200,
     width: '30%',
     margin: 5,
-    boderRadius: 5,
   },
   productTitleContainer: {
     position: 'absolute',
@@ -179,10 +182,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    backgroundColor: '#FFFFFF',
   },
   productTitleName: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#651fff'
   },
   footerContainer: {
     marginTop: 20,
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
   },
   footerTitle: {
     color: '#651fff',
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: 'bold',
   }
 });

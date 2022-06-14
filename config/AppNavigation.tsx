@@ -24,24 +24,15 @@ export default function AppNavigation() {
   // const [userDetails, setUserDetails] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const user = useAuthUser();
-  const getDataFromAsyncStorage = async (key) => {
-    try {
-        const jsonValue = await AsyncStorage.getItem(key);
-        return jsonValue != null ? JSON.parse(jsonValue) : null;
-    }
-    catch (e) {
-        console.log(e);
-    }
-}
   const BottomTabs = () => {
     return (
       <Tabs.Navigator screenOptions={{ headerShown: false, tabBarStyle: {
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#651fff',
       } }} initialRouteName='Home'>
-        <Tabs.Screen name='Home' component={Account}  options={{ tabBarShowLabel: false, tabBarIcon: ({ focused }) => (<HomeIcon name='home' color={focused ? '#651fff' : '#242526'} size={30} />), }} />
-        <Tabs.Screen name='Orders' component={OrderHistory} options={{ tabBarShowLabel: false,tabBarIcon: ({ focused }) => (<OrderIcon name='card-account-details-outline' color={focused ? '#651fff' : '#242526'} size={30} />), }} />
+        <Tabs.Screen name='Home' component={Account}  options={{ tabBarShowLabel: false, tabBarIcon: ({ focused }) => (<HomeIcon name='home' color={focused ? '#FFFFFF' : '#242526'} size={30} />), }} />
+        <Tabs.Screen name='Orders' component={OrderHistory} options={{ tabBarShowLabel: false,tabBarIcon: ({ focused }) => (<OrderIcon name='card-account-details-outline' color={focused ? '#FFFFFF' : '#242526'} size={30} />), }} />
       </Tabs.Navigator>
     );
   }
@@ -53,7 +44,9 @@ export default function AppNavigation() {
           <Stack.Navigator initialRouteName='MainNavigationScreen'>
             <Stack.Screen name='MainNavigationScreen' component={BottomTabs} 
              options={({ navigation }) => ({
-              headerShown: true, headerTitleAlign: 'center' ,headerTitle: 'ContrucTech',
+              headerShown: true, 
+              headerTitleAlign: 'center',
+              headerTitle: 'ContrucTech',
               headerTintColor: '#651fff',
               headerRight: () => (
                 <OffIcon name='user-circle' color='#651fff' size={30} onPress={() => navigation.navigate('Profile')}/>
