@@ -9,52 +9,10 @@ import CarouselBanner from '../common/CarouselBanner';
 import OfferIcon from 'react-native-vector-icons/MaterialIcons';
 import UiDivider from '../common/UiDivider';
 export default function Account({ navigation }, { session }: { session: Session }) {
-  // const [loading, setLoading] = useState(false);
-  // const [apiData, setApiData] = useState<any>();
   const [userSession, setUserSession] = useState<any>(null)
-  // const [servicePackage, setServicePackage] = useState<any>([]);
-  // const fetchApiData = async (userId) => {
-  //   const { data, error } = await supabase
-  //     .from('user-db')
-  //     .select()
-  //     .match({ uuid: userId })
-  //   if (data) {
-  //     setApiData(data);
-  //   }
-  //   if (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // const getServicePackageDetails = async () => {
-  //   const { data, error } = await supabase
-  //     .from('service-detail')
-  //     .select()
-  //   if (data) {
-  //     setServicePackage(data?.[0]?.service_details?.packages);
-  //   }
-  //   else if (error) {
-  //     console.log(error);
-  //   }
-  // }
   useEffect(() => {
     setUserSession(supabase.auth.session())
   }, []);
-  // useEffect(() => {
-  //   if (userSession?.user?.id !== undefined) {
-  //     (async () => {
-  //       await fetchApiData(userSession?.user?.id);
-  //       AsyncStorage.setItem('userId', userSession?.user?.id)
-  //     })()
-  //   }
-  // }, [userSession?.user?.id])
-  // useEffect(() => {
-  //   (async () => {
-  //     setLoading(true);
-  //     await getServicePackageDetails();
-  //     setLoading(false);
-  //   })();
-  // }, [])
-
   const onPackageClick = (packageData: any) => {
     navigation.navigate('PackageDetails', { packageDetails: packageData });
   }
@@ -126,7 +84,7 @@ export default function Account({ navigation }, { session }: { session: Session 
                     overflow: "hidden",
                   }} resizeMode='cover' />
                   <View style={styles.productTitleContainer}>
-                  <Text style={[styles.productTitleName, {color: item.id === 1 || item.id === 4 ? '#242526' : '#FFFFFF'}]}>{item.name}</Text>
+                  <Text style={[styles.productTitleName, {color: item.id === 1 || item.id === 4  || item.id === 5 ? '#242526' : '#FFFFFF'}]}>{item.name}</Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -228,6 +186,7 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     marginTop: 20,
+    marginBottom: 20,
     width: '90%',
     padding: 10,
     borderRadius: 10,

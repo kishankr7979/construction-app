@@ -9,6 +9,7 @@ import { WebView } from 'react-native-webview';
 import UiDivider from '../common/UiDivider';
 import NextIcon from 'react-native-vector-icons/MaterialIcons';
 import {useAuthUser} from '../state/AuthContext';
+import {activeUser} from '../state/UserContext';
 const Profile = ({ navigation }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [serviceDetails, setServiceDetails] = useState<any>();
@@ -64,7 +65,6 @@ const Profile = ({ navigation }) => {
     const logout = () => {
         supabase.auth.signOut()
     }
-    console.log(userDetails);
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.userContainer}>
