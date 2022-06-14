@@ -1,13 +1,10 @@
 import 'react-native-url-polyfill/auto'
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useContext } from 'react'
 import HomeIcon from 'react-native-vector-icons/AntDesign';
 import OffIcon from 'react-native-vector-icons/FontAwesome';
-import { Button, Alert } from 'react-native';
-import { supabase } from '../lib/supabase'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Auth from '../components/Auth'
 import Account from '../components/Account'
-import { View } from 'react-native'
-import { Session } from '@supabase/supabase-js'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -17,20 +14,24 @@ import Onboarding from '../components/Onboarding';
 import Profile from '../components/Profile';
 import Webview from '../components/Webview';
 import OrderIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useAuthUser} from '../state/AuthContext';
+import SplashScreen from '../components/SplashScreen';
 export default function AppNavigation() {
   const Stack = createNativeStackNavigator();
   const Tabs = createBottomTabNavigator();
-  const [session, setSession] = useState<Session | null>(null)
-  const [userDetails, setUserDetails] = useState<any>();
+  const [session, setSession] = useState<any>(undefined)
+  // const [userDetails, setUserDetails] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
-  useLayoutEffect(() => {
-    setLoading(true);
-    setSession(supabase.auth.session())
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-    setLoading(false);
-  }, [])
+  const user = useAuthUser();
+  const getDataFromAsyncStorage = async (key) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem(key);
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
   const BottomTabs = () => {
     return (
       <Tabs.Navigator screenOptions={{ headerShown: false }} initialRouteName='Home'>
@@ -41,7 +42,7 @@ export default function AppNavigation() {
   }
   return (
     <NavigationContainer>
-      {!loading && session && session.user && (
+      {user && (
         <>
           {console.log('session exist')}
           <Stack.Navigator initialRouteName='MainNavigationScreen'>
@@ -59,13 +60,13 @@ export default function AppNavigation() {
           </Stack.Navigator>
         </>
       )}
-      {loading && !session && (
+      {user === undefined && (
         <>
           {console.log('loading')}
-          <Loader />
+          <SplashScreen />
         </>
       )}
-      {!session && (
+      {user === null && (
         <>
           {console.log('no session')}
           <Stack.Navigator initialRouteName='LoginScreen'>

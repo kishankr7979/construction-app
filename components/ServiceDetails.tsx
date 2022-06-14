@@ -71,8 +71,8 @@ const ServiceDetails = ({route, navigation}: WebviewProps) => {
                             </View>
                         <View style={styles.cardInfo}>
                         <View style={styles.cardInfoDetails}>
-                            <Text style={{fontSize:16,letterSpacing:1, color:'#242526'}}>{item.heading}{'\n'}</Text>
-                            <Text style={{fontSize:14,letterSpacing:1,color:'#242526'}}>{item.subHeading}</Text>
+                            <Text style={{fontSize:16,letterSpacing:1, color:'#242526'}}>{item.heading}</Text>
+                            <Text style={{fontSize:14,letterSpacing:1,color:'#242526', marginTop: 8,}}>{item.subHeading}</Text>
                         </View>
                     </View>
                     <UiDivider />
@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
     card:{
     // backgroundColor:'#fff',
     borderRadius:10,
-
     display:'flex',
     flexDirection:'row',
     maxWidth:'100%',
