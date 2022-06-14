@@ -29,6 +29,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra":{
+      "supabase":{
+        "url":"https://gikvmgffezunqzhhdayd.supabase.co",
+        "publicKey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdpa3ZtZ2ZmZXp1bnF6aGhkYXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1NDE1NzQsImV4cCI6MTk3MDExNzU3NH0.--OCI-6wdNPrxvURVJjveWaYg3J39HD92A5sAjTnak0"
+      }
     }
   }
 }

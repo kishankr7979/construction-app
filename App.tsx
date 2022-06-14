@@ -2,15 +2,15 @@ import AppNavigation from './config/AppNavigation'
 import { useNetInfo } from "@react-native-community/netinfo";
 import NoInternetIcon from 'react-native-vector-icons/MaterialIcons';
 import { View, Text } from 'react-native';
+import {AuthContextProvider, useAuthUser} from './state/AuthContext';
+import {UserContextProvider, activeUser} from './state/UserContext';
 export default function App() {
-  const netInfo = useNetInfo();
-  console.log(netInfo);
+  const user = useAuthUser;
   return (
-    <>
-      {netInfo.isInternetReachable ? <AppNavigation /> : (<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-        <NoInternetIcon name='signal-cellular-connected-no-internet-4-bar' size={80} />
-        <Text>No Internet Connection</Text>
-      </View>)}
-    </>
+    <AuthContextProvider>
+      <UserContextProvider>
+      <AppNavigation/>
+      </UserContextProvider>
+    </AuthContextProvider>
   )
 }

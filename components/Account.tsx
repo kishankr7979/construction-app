@@ -2,59 +2,14 @@ import { useState, useEffect, useLayoutEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { StyleSheet, View, Text, ScrollView, Image, ImageBackground, TouchableOpacity, Animated } from "react-native";
 import { ApiError, Session } from "@supabase/supabase-js";
-import { TextInput } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Loader from "../common/Loader";
 import CarouselBanner from '../common/CarouselBanner';
 import OfferIcon from 'react-native-vector-icons/MaterialIcons';
 import UiDivider from '../common/UiDivider';
 export default function Account({ navigation }, { session }: { session: Session }) {
-  // const [loading, setLoading] = useState(false);
-  // const [apiData, setApiData] = useState<any>();
   const [userSession, setUserSession] = useState<any>(null)
-  // const [servicePackage, setServicePackage] = useState<any>([]);
-  // const fetchApiData = async (userId) => {
-  //   const { data, error } = await supabase
-  //     .from('user-db')
-  //     .select()
-  //     .match({ uuid: userId })
-  //   if (data) {
-  //     setApiData(data);
-  //   }
-  //   if (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // const getServicePackageDetails = async () => {
-  //   const { data, error } = await supabase
-  //     .from('service-detail')
-  //     .select()
-  //   if (data) {
-  //     setServicePackage(data?.[0]?.service_details?.packages);
-  //   }
-  //   else if (error) {
-  //     console.log(error);
-  //   }
-  // }
   useEffect(() => {
     setUserSession(supabase.auth.session())
   }, []);
-  // useEffect(() => {
-  //   if (userSession?.user?.id !== undefined) {
-  //     (async () => {
-  //       await fetchApiData(userSession?.user?.id);
-  //       AsyncStorage.setItem('userId', userSession?.user?.id)
-  //     })()
-  //   }
-  // }, [userSession?.user?.id])
-  // useEffect(() => {
-  //   (async () => {
-  //     setLoading(true);
-  //     await getServicePackageDetails();
-  //     setLoading(false);
-  //   })();
-  // }, [])
-
   const onPackageClick = (packageData: any) => {
     navigation.navigate('PackageDetails', { packageDetails: packageData });
   }
@@ -122,11 +77,15 @@ export default function Account({ navigation }, { session }: { session: Session 
               return (
                 <TouchableOpacity style={[styles.productContainer, { width: item.id > 3 ? '45%' : '30%' }]} key={item.id} onPress={()=>onProductClick(item.name)}>
                   <Image source={item.image} style={{
-                    width: '100%', height: '100%', borderRadius: 10,
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 10,
+                    borderWidth: 3,
+                    borderColor: '#FFFFFF',
                     overflow: "hidden",
                   }} resizeMode='cover' />
                   <View style={styles.productTitleContainer}>
-                  <Text style={[styles.productTitleName, {color: item.id === 1 || item.id === 4 ? '#242526' : '#FFFFFF'}]}>{item.name}</Text>
+                  <Text style={[styles.productTitleName]}>{item.name}</Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -212,7 +171,6 @@ const styles = StyleSheet.create({
     height: 200,
     width: '30%',
     margin: 5,
-    boderRadius: 5,
   },
   productTitleContainer: {
     position: 'absolute',
@@ -221,13 +179,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    backgroundColor: '#FFFFFF',
   },
   productTitleName: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#651fff'
   },
   footerContainer: {
     marginTop: 20,
+    marginBottom: 20,
     width: '90%',
     padding: 10,
     borderRadius: 10,
@@ -241,7 +202,7 @@ const styles = StyleSheet.create({
   },
   footerTitle: {
     color: '#651fff',
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: 'bold',
   }
 });

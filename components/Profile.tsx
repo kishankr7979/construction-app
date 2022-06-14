@@ -8,104 +8,88 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WebView } from 'react-native-webview';
 import UiDivider from '../common/UiDivider';
 import NextIcon from 'react-native-vector-icons/MaterialIcons';
+import {useAuthUser} from '../state/AuthContext';
+import {activeUser} from '../state/UserContext';
 const Profile = ({ navigation }) => {
-    const [userSession, setUserSession] = useState<any>();
-    const [userDetails, setUserDetails] = useState<any>();
     const [loading, setLoading] = useState<boolean>(false);
     const [serviceDetails, setServiceDetails] = useState<any>();
-    const fetchUserSession = async () => {
-        const user = supabase.auth.user();
-        setUserSession(user);
-    }
-    const getDataFromAsyncStorage = async(key) => {
-        try{
+    const [userDetails, setUserDetails] = useState<any>();
+    const getDataFromAsyncStorage = async (key) => {
+        try {
             const jsonValue = await AsyncStorage.getItem(key);
             return jsonValue != null ? JSON.parse(jsonValue) : null;
         }
-        catch(e){
+        catch (e) {
             console.log(e);
         }
     }
+    const user = useAuthUser();
     const getUserDetails = async () => {
         setLoading(true);
         const { data, error } = await supabase
             .from('user-db')
             .select()
-            .match({ uuid: userSession?.id })
+            .match({ uuid: user?.id })
         setUserDetails(data);
         if (error) {
             console.log(error);
         }
         setLoading(false);
     }
-    const getServicesDetails = async () => {
-        const { data, error } = await supabase
-            .from('services-db')
-            .select()
-            .match({ uuid: userSession?.id })
-        setServiceDetails(data);
-        if (error) {
-            console.log(error);
-        }
-    }
     const openWebview = () => {
         console.log('triggered');
-        navigation.navigate('Webview', { url: `https://constructech-webview.netlify.app/update-form?id=${userSession?.id}`, afterWebviewClose: 'Profile' });
+        navigation.navigate('Webview', { url: `https://constructech-webview.netlify.app/update-form?id=${user?.id}`, afterWebviewClose: 'Profile' });
     }
     useEffect(() => {
-        if (userDetails === undefined) {
-            Promise.all([fetchUserSession(), getUserDetails(), getServicesDetails()])
-        }
-    }, [userSession?.id !== undefined])
+       getUserDetails();
+    }, [user?.id !== undefined])
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            Promise.all([fetchUserSession(), getUserDetails(), getServicesDetails()])
+            getUserDetails();
         });
         return unsubscribe;
     }, [navigation]);
     const logoutAlert = () =>
-    Alert.alert(
-      "Logout",
-      "are you sure?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "Logout", onPress: () => logout() }
-      ]
-    );
+        Alert.alert(
+            "Logout",
+            "are you sure?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Logout", onPress: () => logout() }
+            ]
+        );
     const logout = () => {
-        // navigation.navigate('Profile');
         supabase.auth.signOut()
-      }
-      console.log(userDetails);
+    }
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.userContainer}>
-    <Text style={styles.userName}>Hi, {userDetails?.[0]?.name !== '' ? userDetails?.[0]?.name : 'User'}</Text>
+                <Text style={styles.userName}>Hi, {userDetails?.[0]?.name !== '' || !userDetails?.[0]?.name ? userDetails?.[0]?.name : 'User'}</Text>
 
-                <Button title={userDetails?.[0]?.name !== '' ? 'Edit' : 'Add'} color='#651fff' onPress={openWebview}/>
+                <Button title={userDetails?.[0]?.name !== '' ? 'Edit' : 'Add'} color='#651fff' onPress={openWebview} />
             </View>
             <UiDivider />
             <View style={styles.supportContainer}>
-                <Text style={[styles.userName, {fontSize: 15,}]}>Help and Support</Text>
-                <NextIcon name='navigate-next' size={30} color='#651fff' />
-            </View>
-            <UiDivider /> 
-            <View style={styles.supportContainer}>
-                <Text style={[styles.userName, {fontSize: 15,}]}>Privacy Policy</Text>
+                <Text style={[styles.userName, { fontSize: 15, }]}>Help and Support</Text>
                 <NextIcon name='navigate-next' size={30} color='#651fff' />
             </View>
             <UiDivider />
             <View style={styles.supportContainer}>
-                <Text style={[styles.userName, {fontSize: 15,}]}>Log Out</Text>
-                <NextIcon name='logout' size={30} color='red' onPress={logoutAlert}/>
+                <Text style={[styles.userName, { fontSize: 15, }]}>Privacy Policy</Text>
+                <NextIcon name='navigate-next' size={30} color='#651fff' />
             </View>
-            <UiDivider /> 
+            <UiDivider />
+            <View style={styles.supportContainer}>
+                <Text style={[styles.userName, { fontSize: 15, }]}>Log Out</Text>
+                <NextIcon name='logout' size={30} color='red' onPress={logoutAlert} />
+            </View>
+            <UiDivider />
             <View style={[styles.versionContainer]}>
-                <Text style={{color: '#242526',}}>version: Beta 0.1.0</Text>
+                <Text style={{ color: '#242526', }}>version: Beta 0.1.0</Text>
             </View>
         </ScrollView>
     )
@@ -119,7 +103,7 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     userContainer: {
-        display:'flex',
+        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
