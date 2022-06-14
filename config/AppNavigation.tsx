@@ -17,6 +17,7 @@ import OrderIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAuthUser} from '../state/AuthContext';
 import SplashScreen from '../components/SplashScreen';
 import OrderHistory from '../components/OrderHistory';
+import PaintPackageDetails from '../components/PaintPackageDetails';
 export default function AppNavigation() {
   const Stack = createNativeStackNavigator();
   const Tabs = createBottomTabNavigator();
@@ -56,6 +57,7 @@ export default function AppNavigation() {
             <Stack.Screen name='Profile' component={Profile} options={{ headerShown: true }} />
             <Stack.Screen name='Webview' options={{ headerShown: true, headerTitle: 'Edit Profile', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <Webview {...props} />}</Stack.Screen>
             <Stack.Screen name='PackageDetails' options={{ headerShown: true, headerTitle: 'Package', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <ServiceDetails {...props} />}</Stack.Screen>
+            <Stack.Screen name='PaintPackageDetails' options={{ headerShown: true, headerTitle: 'Paint Package', headerTintColor: '#2196F3', headerShadowVisible: true, headerStyle: { backgroundColor: '#FFFFFF' } }}>{props => <PaintPackageDetails {...props} />}</Stack.Screen>
           </Stack.Navigator>
         </>
       )}
