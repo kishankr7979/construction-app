@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, StyleSheet, View, Text, Image, ImageBackground, TouchableOpacityBase } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import RupeeIcon from 'react-native-vector-icons/FontAwesome';
 import Info from 'react-native-vector-icons/FontAwesome';
 import { color } from 'react-native-elements/dist/helpers';
@@ -90,7 +90,7 @@ const ServiceDetails = ({ route, navigation }: WebviewProps) => {
                 {packageData === undefined && <Loader />}
                 {packageData !== undefined && packageData?.map((item) => {
                     return (
-                        <View style={styles.card} key={item.id}>
+                        <TouchableOpacity style={styles.card} key={item.id} onPress={() => navigation.navigate('PaintPackageDetails', {selectedPackage: item})}>
                             <View style={styles.subCard}>
                                 <Image source={{uri: item.imageUrl}} style={{ borderRadius: 10, width: 150, height: 140, overflow: "hidden", }} resizeMode='cover' />
                             </View>
@@ -102,7 +102,7 @@ const ServiceDetails = ({ route, navigation }: WebviewProps) => {
                                 </View>
                             </View>
                             <UiDivider />
-                        </View>
+                        </TouchableOpacity>
                     );
                 })}
                 <Text>{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}</Text>
