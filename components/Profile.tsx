@@ -1,15 +1,10 @@
 import { View, Text, StyleSheet, ScrollView, Linking, TouchableWithoutFeedback, Button, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react'
 import { supabase } from "../lib/supabase";
-import Loader from '../common/Loader';
-import CheckIcon from 'react-native-vector-icons/Entypo'
-import UserIcon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WebView } from 'react-native-webview';
 import UiDivider from '../common/UiDivider';
 import NextIcon from 'react-native-vector-icons/MaterialIcons';
-import {useAuthUser} from '../state/AuthContext';
-import {activeUser} from '../state/UserContext';
+import { useAuthUser } from '../state/AuthContext';
 const Profile = ({ navigation }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [serviceDetails, setServiceDetails] = useState<any>();
@@ -37,12 +32,15 @@ const Profile = ({ navigation }) => {
         setLoading(false);
     }
     const openWebview = () => {
+        const userExist = userDetails?.[0]?.name !== undefined;
+        console.log(userExist);
         console.log('triggered');
-        navigation.navigate('Webview', { url: `https://constructech-webview.netlify.app/update-form?id=${user?.id}`, afterWebviewClose: 'Profile' });
+        navigation.navigate('Webview', { url: `https://constructech-webview.netlify.app/update-profile?id=${user?.id}&userExist=${userExist}`, afterWebviewClose: 'Profile' });
     }
     useEffect(() => {
-       getUserDetails();
+        getUserDetails();
     }, [user?.id !== undefined])
+    console.log(userDetails);
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             getUserDetails();
@@ -68,9 +66,9 @@ const Profile = ({ navigation }) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.userContainer}>
-                <Text style={styles.userName}>Hi, {userDetails?.[0]?.name !== '' || !userDetails?.[0]?.name ? userDetails?.[0]?.name : 'User'}</Text>
+                <Text style={styles.userName}>Hi, {userDetails?.[0]?.name ? userDetails?.[0]?.name : 'User'}</Text>
 
-                <Button title={userDetails?.[0]?.name !== '' ? 'Edit' : 'Add'} color='#651fff' onPress={openWebview} />
+                <Button title={userDetails?.[0]?.name ? 'Edit Details' : 'Add Details'} color='#651fff' onPress={openWebview} />
             </View>
             <UiDivider />
             <View style={styles.supportContainer}>
