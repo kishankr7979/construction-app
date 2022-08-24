@@ -25,7 +25,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.construct.app"
+      "package": "com.construct.app",
+      "version":"0.1.2"
     },
     "web": {
       "favicon": "./assets/favicon.png"
