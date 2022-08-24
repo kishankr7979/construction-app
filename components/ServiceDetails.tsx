@@ -86,6 +86,7 @@ const ServiceDetails = ({ route, navigation }: WebviewProps) => {
                     <CarouselBanner data={data} autoPlay autoPlayDuration={3000} />
                 </View>
             </View>
+            <UiDivider />
             <ScrollView>
                 {packageData === undefined && <Loader />}
                 {packageData !== undefined && packageData?.map((item) => {
@@ -125,13 +126,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        height: 250,
+        height: 200,
         borderBottomRightRadius: 25,
         borderBottomLeftRadius: 25,
-        borderWidth: 3,
-        borderColor: '#FFFFFF',
-        borderBottomColor: "#651fff",
-        elevation: 5
     },
     descContainer: {
         display: 'flex',
@@ -139,7 +136,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderColor: '#FFFFFF',
         width: '90%',
-        height: '90%',
+        height: 150,
         // padding:10,
         borderRadius: 20,
 
@@ -186,7 +183,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         width: 350,
         borderColor: '#FFFFFF',
-        borderWidth: 1
+        borderWidth: 2
         // backgroundColor:'#FFFFFF'
     },
     subCard: {
